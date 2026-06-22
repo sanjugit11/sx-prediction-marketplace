@@ -1,0 +1,153 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                   String                 @id @default(uuid())
+  walletAddress        String                 @unique
+  deviceId             String
+  totpEnabled          Boolean                @default(false)
+  totpSecret           String?
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  committedSubAccounts CommittedSubAccount[]
+  stakes               Stake[]
+  listings             MarketplaceListing[]   @relation("SellerRelation")
+  purchases            MarketplaceListing[]   @relation("BuyerRelation")
+
+  @@map("users")
+}
+
+model CommittedSubAccount {
+  id                Int      @id // matches subAccountId from smart contract
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  principal         Decimal  @db.Decimal(78, 0) // Fits 256-bit unsigned integers
+  yieldEarned       Decimal  @default(0) @db.Decimal(78, 0)
+  creationTimestamp DateTime
+  maturityDate      DateTime
+  withdrawn         Boolean  @default(false)
+
+  @@map("committed_sub_accounts")
+}
+
+model Market {
+  id              String   @id @default(uuid())
+  contractAddress String   @unique
+  question        String
+  creator         String
+  endTime         DateTime
+  winner          Boolean?
+  resolved        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  stakes          Stake[]
+
+  @@map("markets")
+}
+
+model Stake {
+  id                   String               @id @default(uuid())
+  positionId           Int                  @unique // positionId in smart contract
+  marketId             String
+  market               Market               @relation(fields: [marketId], references: [id], onDelete: Cascade)
+  userId               String
+  user                 User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  outcome              Boolean
+  amount               Decimal              @db.Decimal(78, 0)
+  oddsAtEntry          Decimal              @db.Decimal(28, 18) // Scaling matching contract's 1e18 odds
+  claimed              Boolean              @default(false)
+  marketplace_listings MarketplaceListing[]
+
+  @@map("stakes")
+}
+
+model MarketplaceListing {
+  id         String   @id @default(uuid())
+  listingId  Int      @unique // listingId in smart contract
+  stakeId    String
+  stake      Stake    @relation(fields: [stakeId], references: [id], onDelete: Cascade)
+  sellerId   String
+  seller     User     @relation("SellerRelation", fields: [sellerId], references: [id], onDelete: Cascade)
+  buyerId    String?
+  buyer      User?    @relation("BuyerRelation", fields: [buyerId], references: [id], onDelete: Cascade)
+  price      Decimal  @db.Decimal(78, 0)
+  status     String   @default("ACTIVE") // ACTIVE, BOUGHT, CANCELED
+  createdAt  DateTime @default(now())
+
+  @@map("marketplace_listings")
+}
+
+model LeaderboardSnapshot {
+  id                String   @id @default(uuid())
+  wallet            String
+  rank              Int
+  accuracy          Decimal  @db.Decimal(5, 2)
+  totalPredictions  Int
+  correctPredictions Int
+  volume            Decimal  @db.Decimal(78, 0)
+  rewardAmount      Decimal  @db.Decimal(78, 0)
+  snapshotDate      DateTime @default(now())
+
+  @@map("leaderboard_snapshots")
+}
+
+model Event {
+  id              String    @id @default(uuid())
+  eventName       String
+  contractAddress String
+  chainId         Int
+  transactionHash String
+  blockNumber     Int
+  logIndex        Int
+  eventData       Json
+  timestamp       DateTime
+  processedAt     DateTime?
+
+  @@unique([chainId, transactionHash, logIndex])
+  @@map("events")
+}
+
+model SyncStatus {
+  chainId            Int @id
+  lastProcessedBlock Int
+
+  @@map("sync_status")
+}
+
+model ReorgLog {
+  id          String   @id @default(uuid())
+  chainId     Int
+  blockNumber Int
+  oldHash     String
+  newHash     String
+  createdAt   DateTime @default(now())
+
+  @@map("reorg_log")
+}
+
+model IndexingError {
+  id        String   @id @default(uuid())
+  chainId   Int
+  txHash    String
+  error     String
+  createdAt DateTime @default(now())
+
+  @@map("indexing_errors")
+}
+
+model SecurityLog {
+  id            String   @id @default(uuid())
+  ipAddress     String?
+  walletAddress String?
+  payload       String
+  detectedType  String
+  severity      String
+  timestamp     DateTime @default(now())
+
+  @@map("security_logs")
+}

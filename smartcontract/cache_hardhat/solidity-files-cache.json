@@ -1,0 +1,1869 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/home/sanjeev/2026/project-9/smartcontract/contracts/FeeTreasuryUpgradeable.sol": {
+      "lastModificationDate": 1782038065769,
+      "contentHash": "680bbadfe1975215c9f305eca4bc9698",
+      "sourceName": "contracts/FeeTreasuryUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "../interfaces/IFeeTreasuryUpgradeable.sol",
+        "./SXAccessControlUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "FeeTreasuryUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/contracts/SXAccessControlUpgradeable.sol": {
+      "lastModificationDate": 1782038055035,
+      "contentHash": "bc923286108fafddcc0b7e89c789496d",
+      "sourceName": "contracts/SXAccessControlUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "../interfaces/ISXAccessControlUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "SXAccessControlUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/interfaces/IFeeTreasuryUpgradeable.sol": {
+      "lastModificationDate": 1782038059226,
+      "contentHash": "3f2090f9cb1471311ae0987f7db54f66",
+      "sourceName": "interfaces/IFeeTreasuryUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "IFeeTreasuryUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol": {
+      "lastModificationDate": 1782037985186,
+      "contentHash": "24562076b21756e3358ede5e844008ce",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ReentrancyGuardUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol": {
+      "lastModificationDate": 1782037985183,
+      "contentHash": "ef20fd32f5bdcc50bd466abc8fc7f181",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "../utils/ContextUpgradeable.sol",
+        "../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "PausableUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
+      "lastModificationDate": 1782037985176,
+      "contentHash": "f0cedd674b4863ee90d1521a92ab82df",
+      "sourceName": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Initializable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1782037985315,
+      "contentHash": "8f19f64d2adadf448840908bbaf431c8",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "IERC20"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol": {
+      "lastModificationDate": 1782037985397,
+      "contentHash": "effe88dd27f56305c4513f7aa9970ec9",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "../IERC20.sol",
+        "../../../interfaces/IERC1363.sol",
+        "../../../utils/Address.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "SafeERC20"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/interfaces/ISXAccessControlUpgradeable.sol": {
+      "lastModificationDate": 1782043614795,
+      "contentHash": "a0eb093316309c07448b6080e8f9acb0",
+      "sourceName": "interfaces/ISXAccessControlUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/IAccessControl.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "ISXAccessControlUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol": {
+      "lastModificationDate": 1782037985049,
+      "contentHash": "61a6b098d98b3b945beb7d9de481c025",
+      "sourceName": "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/access/IAccessControl.sol",
+        "../utils/ContextUpgradeable.sol",
+        "../utils/introspection/ERC165Upgradeable.sol",
+        "../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "AccessControlUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/access/IAccessControl.sol": {
+      "lastModificationDate": 1782037985269,
+      "contentHash": "6f7fac9fa0df6004375e18b7ff7edf4e",
+      "sourceName": "@openzeppelin/contracts/access/IAccessControl.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "IAccessControl"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol": {
+      "lastModificationDate": 1782037985056,
+      "contentHash": "c28aaa25d083a9a55bd9ec9e0b785122",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ContextUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol": {
+      "lastModificationDate": 1782037985083,
+      "contentHash": "61838d7249e45e3941fc2a45d1091448",
+      "sourceName": "@openzeppelin/contracts-upgradeable/utils/introspection/ERC165Upgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/utils/introspection/IERC165.sol",
+        "../../proxy/utils/Initializable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ERC165Upgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/utils/introspection/IERC165.sol": {
+      "lastModificationDate": 1782037985308,
+      "contentHash": "bf0119eb2a570f219729ff38b6cd1df8",
+      "sourceName": "@openzeppelin/contracts/utils/introspection/IERC165.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "IERC165"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/interfaces/IERC1363.sol": {
+      "lastModificationDate": 1782037985302,
+      "contentHash": "6b7c5ee7a59c981072a804c99ab0fac9",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC1363.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "./IERC20.sol",
+        "./IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "IERC1363"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/utils/Address.sol": {
+      "lastModificationDate": 1782037985118,
+      "contentHash": "553fc9ae17d9c00fd1c301b760781e26",
+      "sourceName": "@openzeppelin/contracts/utils/Address.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "./Errors.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Address"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/interfaces/IERC20.sol": {
+      "lastModificationDate": 1782037985313,
+      "contentHash": "79af12d64eacc7d77b9ee2ac4b4d51ee",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "../token/ERC20/IERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": []
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/interfaces/IERC165.sol": {
+      "lastModificationDate": 1782037985307,
+      "contentHash": "f808b485ee0cdc6768ee8385ae5f9a2a",
+      "sourceName": "@openzeppelin/contracts/interfaces/IERC165.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "../utils/introspection/IERC165.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": []
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/utils/Errors.sol": {
+      "lastModificationDate": 1782037985238,
+      "contentHash": "6b5eac2b85500c3012977849cfd633d8",
+      "sourceName": "@openzeppelin/contracts/utils/Errors.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Errors"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/contracts/SXUAUpgradeable.sol": {
+      "lastModificationDate": 1782043648620,
+      "contentHash": "37c15e7b00c7212d0bfe0ada322a5520",
+      "sourceName": "contracts/SXUAUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "../interfaces/ISXUAUpgradeable.sol",
+        "./SXAccessControlUpgradeable.sol",
+        "./FeeTreasuryUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "SXUAUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/interfaces/ISXUAUpgradeable.sol": {
+      "lastModificationDate": 1782038082796,
+      "contentHash": "0b0d067cc6e6e26c51d8d89ab284c749",
+      "sourceName": "interfaces/ISXUAUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "ISXUAUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/proxy/Clones.sol": {
+      "lastModificationDate": 1782037985133,
+      "contentHash": "a8d4465182e22756eda9cb6bd5395bef",
+      "sourceName": "@openzeppelin/contracts/proxy/Clones.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "../utils/Errors.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Clones"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/contracts/PredictionMarketFactoryUpgradeable.sol": {
+      "lastModificationDate": 1782043644322,
+      "contentHash": "20e3ae8298c11eb7e334ec859bf4ea46",
+      "sourceName": "contracts/PredictionMarketFactoryUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/proxy/Clones.sol",
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol",
+        "../interfaces/IPredictionMarketFactoryUpgradeable.sol",
+        "./SXAccessControlUpgradeable.sol",
+        "./VerificationRegistryUpgradeable.sol",
+        "./PredictionMarketUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "PredictionMarketFactoryUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/contracts/VerificationRegistryUpgradeable.sol": {
+      "lastModificationDate": 1782038075459,
+      "contentHash": "b01594b6205e729d0699974d3f2af2db",
+      "sourceName": "contracts/VerificationRegistryUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol",
+        "../interfaces/IVerificationRegistryUpgradeable.sol",
+        "./SXAccessControlUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "VerificationRegistryUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/contracts/PredictionMarketUpgradeable.sol": {
+      "lastModificationDate": 1782043776238,
+      "contentHash": "cba615629d42e0b335d3dfd512529b9c",
+      "sourceName": "contracts/PredictionMarketUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "../interfaces/IPredictionMarketUpgradeable.sol",
+        "./SXAccessControlUpgradeable.sol",
+        "./FeeTreasuryUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "PredictionMarketUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/interfaces/IPredictionMarketFactoryUpgradeable.sol": {
+      "lastModificationDate": 1782038121082,
+      "contentHash": "9ed0a1b9fb819dfa0c810e759c6ad713",
+      "sourceName": "interfaces/IPredictionMarketFactoryUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "IPredictionMarketFactoryUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/interfaces/IVerificationRegistryUpgradeable.sol": {
+      "lastModificationDate": 1782038070543,
+      "contentHash": "de28cbe64427715642b421c6c9ef9d9b",
+      "sourceName": "interfaces/IVerificationRegistryUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "IVerificationRegistryUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/interfaces/IPredictionMarketUpgradeable.sol": {
+      "lastModificationDate": 1782038098799,
+      "contentHash": "99fc3fa112c5c4d90e5d90364d63b1a6",
+      "sourceName": "interfaces/IPredictionMarketUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "IPredictionMarketUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/contracts/ResellingMarketplaceUpgradeable.sol": {
+      "lastModificationDate": 1782038164613,
+      "contentHash": "e7ca12b0d8019d782cec5268b453de57",
+      "sourceName": "contracts/ResellingMarketplaceUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "../interfaces/IResellingMarketplaceUpgradeable.sol",
+        "./SXAccessControlUpgradeable.sol",
+        "./FeeTreasuryUpgradeable.sol",
+        "./PredictionMarketUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "ResellingMarketplaceUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/interfaces/IResellingMarketplaceUpgradeable.sol": {
+      "lastModificationDate": 1782038158947,
+      "contentHash": "20cfd9940ddbabeb6a6c60745e2416fa",
+      "sourceName": "interfaces/IResellingMarketplaceUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "IResellingMarketplaceUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/contracts/ResolutionManagerUpgradeable.sol": {
+      "lastModificationDate": 1782038138725,
+      "contentHash": "4f1cedf1ca104b6170b4dfc1014e3e49",
+      "sourceName": "contracts/ResolutionManagerUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol",
+        "../interfaces/IResolutionManagerUpgradeable.sol",
+        "./SXAccessControlUpgradeable.sol",
+        "./PredictionMarketUpgradeable.sol",
+        "./LeaderboardUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "ResolutionManagerUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/contracts/LeaderboardUpgradeable.sol": {
+      "lastModificationDate": 1782043630159,
+      "contentHash": "6ee590e8fcc9ee3885c88a29a7fd2972",
+      "sourceName": "contracts/LeaderboardUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol",
+        "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol",
+        "../interfaces/ILeaderboardUpgradeable.sol",
+        "./SXAccessControlUpgradeable.sol",
+        "./FeeTreasuryUpgradeable.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "LeaderboardUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/interfaces/IResolutionManagerUpgradeable.sol": {
+      "lastModificationDate": 1782038133814,
+      "contentHash": "6a21b4b5a1c25c1ee07dd8fe45aac061",
+      "sourceName": "interfaces/IResolutionManagerUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "IResolutionManagerUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/interfaces/ILeaderboardUpgradeable.sol": {
+      "lastModificationDate": 1782038146190,
+      "contentHash": "0d4fea7d97b63209c02012f62fda329e",
+      "sourceName": "interfaces/ILeaderboardUpgradeable.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "ILeaderboardUpgradeable"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {
+      "lastModificationDate": 1782037985319,
+      "contentHash": "794db3115001aa372c79326fcfd44b1f",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "../IERC20.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "IERC20Metadata"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol": {
+      "lastModificationDate": 1782037985187,
+      "contentHash": "38910c3dfa5e3778fac8888b1d714084",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/ERC20.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "./IERC20.sol",
+        "./extensions/IERC20Metadata.sol",
+        "../../utils/Context.sol",
+        "../../interfaces/draft-IERC6093.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ERC20"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/interfaces/draft-IERC6093.sol": {
+      "lastModificationDate": 1782037985139,
+      "contentHash": "267d92fe4de67b1bdb3302c08f387dbf",
+      "sourceName": "@openzeppelin/contracts/interfaces/draft-IERC6093.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "IERC1155Errors",
+        "IERC20Errors",
+        "IERC721Errors"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/node_modules/@openzeppelin/contracts/utils/Context.sol": {
+      "lastModificationDate": 1782037985134,
+      "contentHash": "67bfbc07588eb8683b3fd8f6f909563e",
+      "sourceName": "@openzeppelin/contracts/utils/Context.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "Context"
+      ]
+    },
+    "/home/sanjeev/2026/project-9/smartcontract/contracts/mocks/MockERC20.sol": {
+      "lastModificationDate": 1782043662685,
+      "contentHash": "fe92b0987aaccf5008016e2a0e332cb6",
+      "sourceName": "contracts/mocks/MockERC20.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "storageLayout"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "remappings": [
+            "@openzeppelin/contracts/=@openzeppelin/contracts/",
+            "@openzeppelin/contracts-upgradeable/=@openzeppelin/contracts-upgradeable/",
+            "forge-std/=lib/forge-std/src/",
+            "@nomicfoundation/=@nomicfoundation/",
+            "hardhat/=hardhat/",
+            "eth-gas-reporter/=eth-gas-reporter/"
+          ]
+        }
+      },
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/ERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "MockERC20"
+      ]
+    }
+  }
+}
