@@ -33,7 +33,11 @@ export class ResolutionController {
         }
       }
 
-      return res.status(200).json(payload);
+      return res.status(200).json({
+        ...payload,
+        winner: !!winner ? 'YES' : 'NO',
+        winnerBool: !!winner
+      });
     } catch (error) {
       next(error);
     }

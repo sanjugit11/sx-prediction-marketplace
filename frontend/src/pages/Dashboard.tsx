@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { 
@@ -17,42 +17,12 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '.
 import { useAccount } from '../hooks/useWeb3';
 import { useMarketStore } from '../stores/useMarketStore';
 import { formatCurrency } from '../utils/helpers';
-import { formatToken, fromTokenAmount, web3Service, type SxuaSubAccount } from '../services/web3';
+import { formatToken } from '../services/web3';
 
 export const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { address, registeredUsername, subAccounts } = useAccount();
-  const { committedBalance, uncommittedBalance, yieldEarned, stakes } = useMarketStore();
-  const [chainBalances, setChainBalances] = useState<{
-    unified: number;
-    committed: number;
-    uncommitted: number;
-    yieldEarned: number;
-    subAccounts: SxuaSubAccount[];
-  } | null>(null);
-
-  useEffect(() => {
-    if (!address) return;
-    let cancelled = false;
-    web3Service.getSxuaDashboard(address as `0x${string}`)
-      .then(async (data) => {
-        const yieldTotal = data.subAccounts.reduce((sum, sub) => sum + sub.liveYield, 0n);
-        const formatted = {
-          unified: await fromTokenAmount(data.unified),
-          committed: await fromTokenAmount(data.committed),
-          uncommitted: await fromTokenAmount(data.uncommitted),
-          yieldEarned: await fromTokenAmount(yieldTotal),
-          subAccounts: data.subAccounts,
-        };
-        if (!cancelled) setChainBalances(formatted);
-      })
-      .catch(() => {
-        if (!cancelled) setChainBalances(null);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [address]);
+  const { isConnected, registeredUsername, subAccounts } = useAccount();
+  const { committedBalance, uncommittedBalance, yieldEarned, stakes, chainSubAccounts } = useMarketStore();
 
   const activeStakes = stakes.filter(s => s.status === 'active' || s.status === 'listed');
   const resolvedStakes = stakes.filter(s => s.status === 'resolved');
@@ -65,13 +35,13 @@ export const Dashboard: React.FC = () => {
     { day: 'Thu', yield: 22.80, balance: 4100 },
     { day: 'Fri', yield: 25.12, balance: 3900 },
     { day: 'Sat', yield: 28.75, balance: 3900 },
-    { day: 'Sun', yield: chainBalances?.yieldEarned ?? yieldEarned, balance: chainBalances?.uncommitted ?? uncommittedBalance }
+    { day: 'Sun', yield: yieldEarned, balance: uncommittedBalance }
   ];
 
   const stats = [
     {
       title: 'Unified Balance',
-      value: formatCurrency(chainBalances?.unified ?? uncommittedBalance + committedBalance),
+      value: formatCurrency(uncommittedBalance + committedBalance),
       desc: 'Committed + Uncommitted Vaults',
       icon: Wallet,
       color: 'text-indigo-400',
@@ -79,23 +49,23 @@ export const Dashboard: React.FC = () => {
     },
     {
       title: 'Uncommitted Funds',
-      value: formatCurrency(chainBalances?.uncommitted ?? uncommittedBalance),
+      value: formatCurrency(uncommittedBalance),
       desc: 'Available for withdrawals',
       icon: Coins,
       color: 'text-emerald-400',
       glow: 'glow-emerald'
     },
     {
-      title: 'Committed in Stakes',
-      value: formatCurrency(chainBalances?.committed ?? committedBalance),
-      desc: 'Locked in active predictions',
+      title: 'Committed Enclave Funds',
+      value: formatCurrency(committedBalance),
+      desc: 'Locked in yielding sub-wallets',
       icon: TrendingUp,
       color: 'text-cyan-400',
       glow: 'glow-cyan'
     },
     {
       title: 'Yield Earned',
-      value: `+${(chainBalances?.yieldEarned ?? yieldEarned).toFixed(4)} USDC`,
+      value: `+${yieldEarned.toFixed(4)} USDC`,
       desc: 'Accrued on committed accounts',
       icon: Cpu,
       color: 'text-purple-400',
@@ -239,23 +209,31 @@ export const Dashboard: React.FC = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {chainBalances?.subAccounts.length ? chainBalances.subAccounts.map((sub) => (
-                <TableRow key={sub.id.toString()}>
-                  <TableCell className="font-semibold text-white">Sub Account #{sub.id.toString()}</TableCell>
-                  <TableCell className="font-mono text-indigo-300 font-semibold">{Number(formatToken(sub.principal)).toFixed(2)} USDC</TableCell>
-                  <TableCell className="font-mono text-slate-400 text-xs">{new Date(Number(sub.createdAt) * 1000).toLocaleDateString()}</TableCell>
-                  <TableCell className="font-mono text-cyan-300 font-semibold">{new Date(Number(sub.maturityDate) * 1000).toLocaleDateString()}</TableCell>
-                  <TableCell>
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${
-                      sub.withdrawn
-                        ? 'bg-slate-500/10 text-slate-400 border-slate-500/20'
-                        : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                    }`}>
-                      {Number(formatToken(sub.liveYield)).toFixed(4)} USDC
-                    </span>
-                  </TableCell>
-                </TableRow>
-              )) : subAccounts.map((sub) => (
+              {isConnected ? (
+                chainSubAccounts.length ? chainSubAccounts.map((sub) => (
+                  <TableRow key={sub.id.toString()}>
+                    <TableCell className="font-semibold text-white">Sub Account #{sub.id.toString()}</TableCell>
+                    <TableCell className="font-mono text-indigo-300 font-semibold">{Number(formatToken(sub.principal)).toFixed(2)} USDC</TableCell>
+                    <TableCell className="font-mono text-slate-400 text-xs">{new Date(Number(sub.createdAt) * 1000).toLocaleDateString()}</TableCell>
+                    <TableCell className="font-mono text-cyan-300 font-semibold">{new Date(Number(sub.maturityDate) * 1000).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider border ${
+                        sub.withdrawn
+                          ? 'bg-slate-500/10 text-slate-400 border-slate-500/20'
+                          : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                      }`}>
+                        {Number(formatToken(sub.liveYield)).toFixed(4)} USDC
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                )) : (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center text-slate-500 py-4 font-medium">
+                      No active sub-accounts found. Deposit committed funds to generate one.
+                    </TableCell>
+                  </TableRow>
+                )
+              ) : subAccounts.map((sub) => (
                 <TableRow key={sub.id}>
                   <TableCell className="font-semibold text-white">{sub.name}</TableCell>
                   <TableCell className="font-mono text-slate-400 text-xs">{sub.address}</TableCell>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Coins, Layers, CheckCircle2 } from 'lucide-react';
+import { Coins, Layers, CheckCircle2, RefreshCw } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
 import { Button } from '../components/ui/Button';
@@ -17,13 +17,32 @@ import { fromTokenAmount } from '../services/web3';
 import type { Stake } from '../types';
 
 export const MyPositions: React.FC = () => {
-  const { stakes, listPositionForSale } = useMarketStore();
+  const { stakes, listPositionForSale, setTransactionPending, syncBalances } = useMarketStore();
   const { address } = useAccount();
 
   const [activeStakeIdForSale, setActiveStakeIdForSale] = useState<string | null>(null);
   const [isListing, setIsListing] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [chainPositions, setChainPositions] = useState<Stake[] | null>(null);
+  const [claimingId, setClaimingId] = useState<string | null>(null);
+
+  const handleClaim = async (marketId: string, stakeId: string) => {
+    if (!address) return;
+    setClaimingId(stakeId);
+    setTransactionPending(true);
+    try {
+      await web3Service.claimPayout(marketId, stakeId);
+      if (chainPositions) {
+        setChainPositions(prev => prev ? prev.map(item => item.id === stakeId ? { ...item, claimed: true } : item) : null);
+      }
+      await syncBalances(address);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setClaimingId(null);
+      setTransactionPending(false);
+    }
+  };
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<ListingInput>({
     resolver: zodResolver(ListingSchema),
@@ -48,6 +67,7 @@ export const MyPositions: React.FC = () => {
           timestamp: new Date(Number(pos.createdAt) * 1000).toISOString().replace('T', ' ').substring(0, 19),
           txHash: '',
           status: pos.resolved ? 'resolved' : 'active',
+          claimed: pos.claimed,
         } satisfies Stake)));
         if (!cancelled) setChainPositions(mapped);
       })
@@ -71,16 +91,25 @@ export const MyPositions: React.FC = () => {
       setIsListing(false);
       return;
     }
-    await web3Service.listPositionForSale(stake.marketId, stake.id, data.askingPrice, address);
+    setTransactionPending(true);
+    try {
+      await web3Service.listPositionForSale(stake.marketId, stake.id, data.askingPrice, address);
 
-    if (!chainPositions) {
-      listPositionForSale(activeStakeIdForSale, data.askingPrice);
+      if (!chainPositions) {
+        listPositionForSale(activeStakeIdForSale, data.askingPrice);
+      }
+      
+      setIsListing(false);
+      setActiveStakeIdForSale(null);
+      setShowSuccessDialog(true);
+      reset();
+      await syncBalances(address);
+    } catch (err) {
+      console.error(err);
+      setIsListing(false);
+    } finally {
+      setTransactionPending(false);
     }
-    
-    setIsListing(false);
-    setActiveStakeIdForSale(null);
-    setShowSuccessDialog(true);
-    reset();
   };
 
   return (
@@ -160,8 +189,25 @@ export const MyPositions: React.FC = () => {
                         {pos.status === 'listed' && (
                           <span className="text-xs text-slate-500 italic">Marketplace Active</span>
                         )}
-                        {pos.status === 'resolved' && (
-                          <span className="text-xs text-slate-500 italic">Settled</span>
+                        {pos.status === 'resolved' && !pos.claimed && (
+                          claimingId === pos.id ? (
+                            <span className="inline-flex items-center gap-1.5 text-xs text-indigo-400 font-semibold">
+                              <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                              Claiming...
+                            </span>
+                          ) : (
+                            <Button 
+                              size="sm" 
+                              variant="success" 
+                              onClick={() => handleClaim(pos.marketId, pos.id)}
+                              className="px-2.5 py-1.5 text-[10px] uppercase font-bold"
+                            >
+                              Claim Payout
+                            </Button>
+                          )
+                        )}
+                        {pos.status === 'resolved' && pos.claimed && (
+                          <span className="text-xs text-emerald-500 italic">Claimed</span>
                         )}
                       </TableCell>
                     </TableRow>

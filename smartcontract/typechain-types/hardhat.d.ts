@@ -98,6 +98,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.MockERC20__factory>;
     getContractFactory(
+      name: "PredictionMarketUnverified",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.PredictionMarketUnverified__factory>;
+    getContractFactory(
       name: "PredictionMarketFactoryUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.PredictionMarketFactoryUpgradeable__factory>;
@@ -268,6 +272,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.MockERC20>;
     getContractAt(
+      name: "PredictionMarketUnverified",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.PredictionMarketUnverified>;
+    getContractAt(
       name: "PredictionMarketFactoryUpgradeable",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
@@ -433,6 +442,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.MockERC20>;
     deployContract(
+      name: "PredictionMarketUnverified",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PredictionMarketUnverified>;
+    deployContract(
       name: "PredictionMarketFactoryUpgradeable",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.PredictionMarketFactoryUpgradeable>;
@@ -602,6 +615,11 @@ declare module "hardhat/types/runtime" {
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.MockERC20>;
+    deployContract(
+      name: "PredictionMarketUnverified",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.PredictionMarketUnverified>;
     deployContract(
       name: "PredictionMarketFactoryUpgradeable",
       args: any[],

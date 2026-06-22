@@ -5,10 +5,8 @@ import {
   formatUnits,
   http,
   isAddress,
-  keccak256,
   parseAbi,
   parseUnits,
-  stringToHex,
   type Address,
   type Hash,
 } from 'viem';
@@ -124,7 +122,9 @@ const getPublicClient = (chainKey = activeChainKey) => chainKey === 'hoodi' ? pu
 const erc20Abi = parseAbi([
   'function approve(address spender, uint256 amount) external returns (bool)',
   'function allowance(address owner, address spender) external view returns (uint256)',
+  'function balanceOf(address account) external view returns (uint256)',
   'function decimals() external view returns (uint8)',
+  'function mint(address to, uint256 amount) external',
 ]);
 
 const sxuaAbi = parseAbi([
@@ -185,11 +185,7 @@ const verificationAbi = parseAbi([
   'function isVerified(address implementation) external view returns (bool)',
 ]);
 
-const accessControlAbi = parseAbi([
-  'function hasRole(bytes32 role, address account) external view returns (bool)',
-  'function DEFAULT_ADMIN_ROLE() external view returns (bytes32)',
-  'function RESOLVER_ROLE() external view returns (bytes32)',
-]);
+
 
 const receipt = (hash: Hash) => publicClient.waitForTransactionReceipt({ hash });
 
@@ -244,6 +240,25 @@ const write = async ({
   await ensureChain(activeChainKey);
   const walletClient = await getWalletClient();
   const account = await getAccount();
+  const client = getPublicClient();
+
+  let gasEstimate;
+  try {
+    gasEstimate = await client.estimateContractGas({
+      account,
+      address,
+      abi,
+      functionName,
+      args: args ?? [],
+    } as any);
+    // Add a 20% buffer to the gas estimate for safety
+    gasEstimate = (gasEstimate * 120n) / 100n;
+  } catch (error: any) {
+    console.warn('Gas estimation failed:', error);
+    const reason = error?.shortMessage || error?.message || 'Transaction will likely revert.';
+    throw new Error(`Gas estimation failed: ${reason}`);
+  }
+
   const hash = await walletClient.writeContract({
     account,
     chain: SUPPORTED_CHAINS[activeChainKey],
@@ -251,13 +266,22 @@ const write = async ({
     abi,
     functionName,
     args: args ?? [],
+    gas: gasEstimate,
   } as any);
   return receipt(hash);
 };
 
+const decimalsCache: Record<string, number> = {};
+
 const tokenDecimals = async (token = requireAddress(contracts.usdc, 'USDC_ADDRESS')) => {
+  const tokenLower = token.toLowerCase();
+  if (decimalsCache[tokenLower] !== undefined) {
+    return decimalsCache[tokenLower];
+  }
   try {
-    return await publicClient.readContract({ address: token, abi: erc20Abi, functionName: 'decimals' });
+    const decimals = await publicClient.readContract({ address: token, abi: erc20Abi, functionName: 'decimals' });
+    decimalsCache[tokenLower] = decimals;
+    return decimals;
   } catch {
     return 18;
   }
@@ -291,6 +315,22 @@ export const web3Service = {
   approveToken: async (spender: Address, amount: number | string, token = requireAddress(getContracts().usdc, 'USDC_ADDRESS')) => {
     const parsed = await toTokenAmount(amount, token);
     return write({ address: token, abi: erc20Abi, functionName: 'approve', args: [spender, parsed] });
+  },
+
+  getTokenBalance: async (user: Address, token = requireAddress(getContracts().usdc, 'USDC_ADDRESS')) => {
+    const client = getPublicClient();
+    try {
+      const raw = await client.readContract({ address: token, abi: erc20Abi, functionName: 'balanceOf', args: [user] });
+      return Number(formatUnits(raw, await tokenDecimals(token)));
+    } catch {
+      return 0;
+    }
+  },
+
+  /** Mints MockERC20 test tokens directly to the caller — only works on testnet MockERC20 */
+  mintTestTokens: async (amount: number, to: Address, token = requireAddress(getContracts().usdc, 'USDC_ADDRESS')) => {
+    const parsed = await toTokenAmount(amount, token);
+    return write({ address: token, abi: erc20Abi, functionName: 'mint', args: [to, parsed] });
   },
 
   getSxuaDashboard: async (user: Address, token = requireAddress(getContracts().usdc, 'USDC_ADDRESS')) => {

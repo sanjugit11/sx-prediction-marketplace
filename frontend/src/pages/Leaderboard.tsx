@@ -1,21 +1,85 @@
-import React, { useState } from 'react';
-import { Zap, ShieldCheck, Trophy, Sparkles, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Zap, ShieldCheck, Trophy, Sparkles, CheckCircle2, RefreshCw } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../components/ui/Table';
 import { Button } from '../components/ui/Button';
 import { useMarketStore } from '../stores/useMarketStore';
+import { useAccount } from '../hooks/useWeb3';
+import { web3Service, fromTokenAmount } from '../services/web3';
 import { formatCurrency } from '../utils/helpers';
 
+interface ApiLeaderboardEntry {
+  wallet: string;
+  rank: number;
+  accuracy: number | string;
+  totalPredictions: number;
+  correctPredictions: number;
+  volume: number | string;
+  rewardAmount: number | string;
+}
+
 export const Leaderboard: React.FC = () => {
-  const { leaderboard } = useMarketStore();
-  const [weeklyRewardClaimed, setWeeklyRewardClaimed] = useState(false);
+  const { address } = useAccount();
+  const { setTransactionPending, syncBalances } = useMarketStore();
+
+  const [entries, setEntries] = useState<ApiLeaderboardEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isClaiming, setIsClaiming] = useState(false);
+  const [claimResult, setClaimResult] = useState<'idle' | 'success' | 'no-reward'>('idle');
+  const [pendingReward, setPendingReward] = useState<number>(0);
+
+  // Fetch leaderboard from backend API
+  useEffect(() => {
+    let cancelled = false;
+    const fetchLeaderboard = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch('/api/leaderboard');
+        if (!response.ok) throw new Error(`API returned ${response.status}`);
+        const data: ApiLeaderboardEntry[] = await response.json();
+        if (!cancelled) setEntries(data);
+      } catch (err) {
+        if (!cancelled) setError(err instanceof Error ? err.message : 'Failed to load leaderboard');
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    fetchLeaderboard();
+    return () => { cancelled = true; };
+  }, []);
+
+  // Check on-chain claimable reward for connected user
+  useEffect(() => {
+    if (!address) return;
+    web3Service.pendingReward(address as `0x${string}`)
+      .then(async (reward) => {
+        setPendingReward(await fromTokenAmount(reward));
+      })
+      .catch(() => setPendingReward(0));
+  }, [address, claimResult]);
 
   const handleClaimReward = async () => {
+    if (!address) return;
     setIsClaiming(true);
-    await new Promise((res) => setTimeout(res, 1200));
-    setWeeklyRewardClaimed(true);
-    setIsClaiming(false);
+    setTransactionPending(true);
+    try {
+      if (pendingReward <= 0) {
+        setClaimResult('no-reward');
+        return;
+      }
+      const receipt = await web3Service.claimReward();
+      if (receipt.status === 'success') {
+        setClaimResult('success');
+        await syncBalances(address);
+      }
+    } catch (err) {
+      console.error('Claim failed:', err);
+    } finally {
+      setIsClaiming(false);
+      setTransactionPending(false);
+    }
   };
 
   const getRankBadge = (rank: number) => {
@@ -29,6 +93,21 @@ export const Leaderboard: React.FC = () => {
       default:
         return <span className="font-mono text-slate-500 font-bold">#{rank}</span>;
     }
+  };
+
+  const shortAddress = (addr: string) => {
+    if (addr.length <= 13) return addr;
+    return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+  };
+
+  const formatVolume = (vol: number | string) => {
+    const n = Number(vol);
+    if (n === 0) return '$0';
+    // volumes stored as raw token amounts (18 decimals) — convert
+    if (n > 1e15) {
+      return formatCurrency(n / 1e18);
+    }
+    return formatCurrency(n);
   };
 
   return (
@@ -45,20 +124,25 @@ export const Leaderboard: React.FC = () => {
         </div>
         
         {/* Weekly incentive claim panel */}
-        {!weeklyRewardClaimed ? (
+        {claimResult === 'idle' ? (
           <Button 
             size="sm" 
             onClick={handleClaimReward}
             isLoading={isClaiming}
+            disabled={!address}
             className="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 shadow-[0_0_15px_rgba(245,158,11,0.3)] text-slate-950 font-bold"
           >
             <Sparkles className="h-4.5 w-4.5 mr-1.5 animate-pulse" />
-            Claim Weekly Incentive
+            {pendingReward > 0 ? `Claim ${formatCurrency(pendingReward)} Reward` : 'Claim Reward'}
           </Button>
-        ) : (
+        ) : claimResult === 'success' ? (
           <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
             <CheckCircle2 className="h-4.5 w-4.5" />
-            Weekly Incentive Claimed (+50 SX)
+            Reward Claimed Successfully
+          </div>
+        ) : (
+          <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-500/10 border border-slate-500/20 text-slate-400 text-xs font-semibold">
+            No claimable reward available
           </div>
         )}
       </div>
@@ -106,42 +190,62 @@ export const Leaderboard: React.FC = () => {
       <Card className="border border-white/5 glow-indigo">
         <CardHeader>
           <CardTitle>Top 10 Global Traders</CardTitle>
-          <CardDescription>Epoch 4 ranking parameters. Refreshed hourly.</CardDescription>
+          <CardDescription>Live ranking based on on-chain prediction data. Refreshed from backend API.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-16 text-center">Rank</TableHead>
-                <TableHead>Trader</TableHead>
-                <TableHead>Secure Address</TableHead>
-                <TableHead>Accuracy</TableHead>
-                <TableHead>Total Stakes</TableHead>
-                <TableHead>Trading Volume</TableHead>
-                <TableHead className="text-right">Rewards Claimed</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {leaderboard.map((entry) => (
-                <TableRow key={entry.rank}>
-                  <TableCell className="text-center font-bold">{getRankBadge(entry.rank)}</TableCell>
-                  <TableCell className="font-semibold text-slate-200">{entry.username}</TableCell>
-                  <TableCell className="font-mono text-slate-500 text-xs">{entry.address}</TableCell>
-                  <TableCell>
-                    <span className="text-indigo-400 font-extrabold font-mono">{entry.accuracy}%</span>
-                    <div className="w-16 bg-slate-800 h-1 rounded-full mt-1 overflow-hidden">
-                      <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${entry.accuracy}%` }} />
-                    </div>
-                  </TableCell>
-                  <TableCell className="font-mono text-slate-350 font-semibold">{entry.totalPredictions}</TableCell>
-                  <TableCell className="font-mono text-cyan-300 font-semibold">{formatCurrency(entry.volume)}</TableCell>
-                  <TableCell className="text-right font-mono text-emerald-400 font-bold">
-                    {entry.rewardsClaimed.toLocaleString()} SX
-                  </TableCell>
+          {loading ? (
+            <div className="flex items-center justify-center py-12 gap-3">
+              <RefreshCw className="h-6 w-6 text-indigo-500 animate-spin" />
+              <span className="text-sm text-slate-400">Loading leaderboard...</span>
+            </div>
+          ) : error ? (
+            <div className="py-8 text-center text-sm text-rose-400">
+              Failed to load leaderboard: {error}
+            </div>
+          ) : entries.length === 0 ? (
+            <div className="py-8 text-center text-sm text-slate-500">
+              No rankings available yet. Place some predictions to get started!
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-16 text-center">Rank</TableHead>
+                  <TableHead>Wallet</TableHead>
+                  <TableHead>Accuracy</TableHead>
+                  <TableHead>Total Stakes</TableHead>
+                  <TableHead>Correct</TableHead>
+                  <TableHead>Trading Volume</TableHead>
+                  <TableHead className="text-right">Reward</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {entries.slice(0, 10).map((entry) => (
+                  <TableRow key={entry.wallet}>
+                    <TableCell className="text-center font-bold">{getRankBadge(entry.rank)}</TableCell>
+                    <TableCell className="font-mono text-slate-300 text-xs">
+                      {shortAddress(entry.wallet)}
+                      {address && entry.wallet.toLowerCase() === address.toLowerCase() && (
+                        <span className="ml-2 text-[10px] text-indigo-400 font-bold uppercase">(You)</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <span className="text-indigo-400 font-extrabold font-mono">{Number(entry.accuracy).toFixed(1)}%</span>
+                      <div className="w-16 bg-slate-800 h-1 rounded-full mt-1 overflow-hidden">
+                        <div className="h-full bg-indigo-500 rounded-full" style={{ width: `${Math.min(100, Number(entry.accuracy))}%` }} />
+                      </div>
+                    </TableCell>
+                    <TableCell className="font-mono text-slate-350 font-semibold">{entry.totalPredictions}</TableCell>
+                    <TableCell className="font-mono text-emerald-400 font-semibold">{entry.correctPredictions}</TableCell>
+                    <TableCell className="font-mono text-cyan-300 font-semibold">{formatVolume(entry.volume)}</TableCell>
+                    <TableCell className="text-right font-mono text-emerald-400 font-bold">
+                      {Number(entry.rewardAmount) > 0 ? formatCurrency(Number(entry.rewardAmount)) : '—'}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
 

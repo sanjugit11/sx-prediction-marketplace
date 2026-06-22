@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { MockERC20__factory } from "./MockERC20__factory";
+export { PredictionMarketUnverified__factory } from "./PredictionMarketUnverified__factory";

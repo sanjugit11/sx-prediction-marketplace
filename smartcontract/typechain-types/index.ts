@@ -50,6 +50,8 @@ export type { LeaderboardUpgradeable } from "./contracts/LeaderboardUpgradeable"
 export { LeaderboardUpgradeable__factory } from "./factories/contracts/LeaderboardUpgradeable__factory";
 export type { MockERC20 } from "./contracts/mocks/MockERC20";
 export { MockERC20__factory } from "./factories/contracts/mocks/MockERC20__factory";
+export type { PredictionMarketUnverified } from "./contracts/mocks/PredictionMarketUnverified";
+export { PredictionMarketUnverified__factory } from "./factories/contracts/mocks/PredictionMarketUnverified__factory";
 export type { PredictionMarketFactoryUpgradeable } from "./contracts/PredictionMarketFactoryUpgradeable";
 export { PredictionMarketFactoryUpgradeable__factory } from "./factories/contracts/PredictionMarketFactoryUpgradeable__factory";
 export type { PredictionMarketUpgradeable } from "./contracts/PredictionMarketUpgradeable";

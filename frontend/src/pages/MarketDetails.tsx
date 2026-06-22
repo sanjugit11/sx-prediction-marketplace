@@ -16,16 +16,18 @@ export const MarketDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   
-  const { markets, stakeOnMarket, uncommittedBalance } = useMarketStore();
+  const { markets, stakeOnMarket, uncommittedBalance, setTransactionPending, syncBalances } = useMarketStore();
   const { address } = useAccount();
 
   const [stakeAmount, setStakeAmount] = useState<number>(100);
+  const [hasInitializedAmount, setHasInitializedAmount] = useState(false);
   const [stakeOutcome, setStakeOutcome] = useState<'YES' | 'NO'>('YES');
   const [txState, setTxState] = useState<'idle' | 'sealing' | 'success'>('idle');
   const [txHash, setTxHash] = useState('');
   const [chainMarket, setChainMarket] = useState<Market | null>(null);
   const [chainUncommittedBalance, setChainUncommittedBalance] = useState<number | null>(null);
   const [oddsMultiples, setOddsMultiples] = useState({ yes: 2, no: 2 });
+
 
   useEffect(() => {
     if (!id || !isAddress(id)) return;
@@ -37,6 +39,7 @@ export const MarketDetails: React.FC = () => {
         const yesPercent = yesPool + noPool > 0 ? (yesPool / (yesPool + noPool)) * 100 : 50;
         const yesMultiple = Number(item.yesOdds) / 1e18;
         const noMultiple = Number(item.noOdds) / 1e18;
+        const minStakeParsed = await fromTokenAmount(item.minimumStake);
         if (!cancelled) {
           setOddsMultiples({ yes: yesMultiple, no: noMultiple });
           setChainMarket({
@@ -55,6 +58,7 @@ export const MarketDetails: React.FC = () => {
             isVerified: true,
             verificationHash: item.address,
             createdAt: '',
+            minimumStake: minStakeParsed,
           });
         }
       })
@@ -80,6 +84,13 @@ export const MarketDetails: React.FC = () => {
   }, [address]);
 
   const market = chainMarket ?? markets.find(m => m.id === id);
+
+  useEffect(() => {
+    if (market && market.minimumStake && !hasInitializedAmount) {
+      setStakeAmount(market.minimumStake);
+      setHasInitializedAmount(true);
+    }
+  }, [market, hasInitializedAmount]);
 
   if (!market) {
     return (
@@ -110,19 +121,28 @@ export const MarketDetails: React.FC = () => {
   const handlePlaceStake = async () => {
     if (!address) return;
     if (stakeAmount > availableBalance || stakeAmount <= 0) return;
+    if (market.minimumStake && stakeAmount < market.minimumStake) return;
 
     setTxState('sealing');
-    
-    // Simulate secure enclave signing & on-chain relay
-    const receipt = await web3Service.placeStake(market.id, stakeOutcome, stakeAmount, address);
-    
-    const res = stakeOnMarket(market.id, stakeOutcome, stakeAmount);
-    setTxHash(receipt.transactionHash || res.txHash);
-    if (isAddress(market.id)) {
-      const refreshed = await web3Service.getMarket(market.id as `0x${string}`);
-      setOddsMultiples({ yes: Number(refreshed.yesOdds) / 1e18, no: Number(refreshed.noOdds) / 1e18 });
+    setTransactionPending(true);
+    try {
+      // Simulate secure enclave signing & on-chain relay
+      const receipt = await web3Service.placeStake(market.id, stakeOutcome, stakeAmount, address);
+      
+      const res = stakeOnMarket(market.id, stakeOutcome, stakeAmount);
+      setTxHash(receipt.transactionHash || res.txHash);
+      if (isAddress(market.id)) {
+        const refreshed = await web3Service.getMarket(market.id as `0x${string}`);
+        setOddsMultiples({ yes: Number(refreshed.yesOdds) / 1e18, no: Number(refreshed.noOdds) / 1e18 });
+      }
+      await syncBalances(address);
+      setTxState('success');
+    } catch (err) {
+      console.error(err);
+      setTxState('idle');
+    } finally {
+      setTransactionPending(false);
     }
-    setTxState('success');
   };
 
   return (
@@ -265,7 +285,13 @@ export const MarketDetails: React.FC = () => {
                     type="number"
                     value={stakeAmount}
                     onChange={(e) => setStakeAmount(parseFloat(e.target.value) || 0)}
-                    error={stakeAmount > availableBalance ? 'Exceeds uncommitted balance' : undefined}
+                    error={
+                      stakeAmount > availableBalance 
+                        ? 'Exceeds uncommitted balance' 
+                        : market.minimumStake && stakeAmount < market.minimumStake
+                        ? `Amount must be at least ${market.minimumStake} USDC`
+                        : undefined
+                    }
                   />
 
                   {/* Math calculations box */}
@@ -290,7 +316,11 @@ export const MarketDetails: React.FC = () => {
                   <Button
                     onClick={handlePlaceStake}
                     className="w-full"
-                    disabled={stakeAmount <= 0 || stakeAmount > availableBalance}
+                    disabled={
+                      stakeAmount <= 0 || 
+                      stakeAmount > availableBalance ||
+                      Boolean(market.minimumStake && stakeAmount < market.minimumStake)
+                    }
                   >
                     Confirm Enclave Stake
                   </Button>

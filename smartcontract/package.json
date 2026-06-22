@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy:hoodi": "hardhat run script/deploy.ts --network hoodiTestnet",
+    "deploy:base": "hardhat run script/deploy.ts --network baseSepolia",
+    "verify:hoodi": "VERIFY_NETWORK=hoodiTestnet ts-node script/verify.ts",
+    "verify:base": "VERIFY_NETWORK=baseSepolia ts-node script/verify.ts"
   },
   "keywords": [],
   "author": "",

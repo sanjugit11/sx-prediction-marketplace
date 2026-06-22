@@ -16,7 +16,7 @@ import { formatCurrency } from '../utils/helpers';
 
 export const Withdraw: React.FC = () => {
   const navigate = useNavigate();
-  const { uncommittedBalance, committedBalance, withdrawFunds } = useMarketStore();
+  const { uncommittedBalance, committedBalance, withdrawFunds, setTransactionPending, syncBalances } = useMarketStore();
   const { address } = useAccount();
 
   const [txState, setTxState] = useState<'idle' | 'checking' | 'withdrawing' | 'success'>('idle');
@@ -72,27 +72,36 @@ export const Withdraw: React.FC = () => {
     if (withdrawMode === 'uncommitted' && data.amount > availableUncommitted) return;
     if (withdrawMode === 'committed' && !selectedSubAccount) return;
 
-    setTxState('checking');
-    await new Promise((res) => setTimeout(res, 1000));
+    setTransactionPending(true);
+    try {
+      setTxState('checking');
+      await new Promise((res) => setTimeout(res, 1000));
 
-    setTxState('withdrawing');
-    const receipt = withdrawMode === 'committed'
-      ? await web3Service.withdrawCommitted(selectedSubAccount!.id)
-      : await web3Service.withdrawFunds(data.amount, address);
-    
-    const res = withdrawMode === 'uncommitted' && !chainBalances
-      ? withdrawFunds(data.amount)
-      : {
-          requiresPenalty: withdrawMode === 'committed' && isEarlyCommittedWithdrawal,
-          penaltyAmount: withdrawMode === 'committed' && selectedSubAccount ? await fromTokenAmount((selectedSubAccount.principal * 6n) / 100n) : 0,
-        };
-    setPenaltyReport({
-      requiresPenalty: res.requiresPenalty,
-      penaltyAmount: res.penaltyAmount
-    });
-    
-    setTxHash(receipt.transactionHash);
-    setTxState('success');
+      setTxState('withdrawing');
+      const receipt = withdrawMode === 'committed'
+        ? await web3Service.withdrawCommitted(selectedSubAccount!.id)
+        : await web3Service.withdrawFunds(data.amount, address);
+      
+      const res = withdrawMode === 'uncommitted' && !chainBalances
+        ? withdrawFunds(data.amount)
+        : {
+            requiresPenalty: withdrawMode === 'committed' && isEarlyCommittedWithdrawal,
+            penaltyAmount: withdrawMode === 'committed' && selectedSubAccount ? await fromTokenAmount((selectedSubAccount.principal * 6n) / 100n) : 0,
+          };
+      setPenaltyReport({
+        requiresPenalty: res.requiresPenalty,
+        penaltyAmount: res.penaltyAmount
+      });
+      
+      await syncBalances(address);
+      setTxHash(receipt.transactionHash);
+      setTxState('success');
+    } catch (err) {
+      console.error(err);
+      setTxState('idle');
+    } finally {
+      setTransactionPending(false);
+    }
   };
 
   return (

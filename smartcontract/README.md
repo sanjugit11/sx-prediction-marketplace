@@ -64,3 +64,7 @@ $ forge --help
 $ anvil --help
 $ cast --help
 ```
+
+## formal verification
+
+npx ts-node -T script/fv_demo.ts

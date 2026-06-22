@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { Market, Stake, MarketplaceListing, LeaderboardEntry } from '../types';
+import { web3Service, fromTokenAmount, type SxuaSubAccount } from '../services/web3';
 
 interface MarketStore {
   committedBalance: number;
@@ -9,6 +10,8 @@ interface MarketStore {
   stakes: Stake[];
   listings: MarketplaceListing[];
   leaderboard: LeaderboardEntry[];
+  chainSubAccounts: SxuaSubAccount[];
+  isTransactionPending: boolean;
   
   depositStablecoins: (amount: number) => void;
   withdrawFunds: (amount: number) => { success: boolean; requiresPenalty: boolean; penaltyAmount: number };
@@ -25,9 +28,29 @@ interface MarketStore {
   // Simulation ticks
   tickYield: () => void;
   tickOdds: () => void;
+
+  syncBalances: (address: string) => Promise<void>;
+  setTransactionPending: (pending: boolean) => void;
 }
 
 const STORAGE_KEY = 'sx_market_state';
+
+const saveStateToLocalStorage = (state: any) => {
+  try {
+    const { committedBalance, uncommittedBalance, yieldEarned, markets, stakes, listings, leaderboard } = state;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      committedBalance,
+      uncommittedBalance,
+      yieldEarned,
+      markets,
+      stakes,
+      listings,
+      leaderboard
+    }));
+  } catch (e) {
+    console.error('Failed to save market state to localStorage', e);
+  }
+};
 
 const initialMarkets: Market[] = [
   {
@@ -203,6 +226,7 @@ const getInitialState = () => {
         stakes: parsed.stakes ?? initialStakes,
         listings: parsed.listings ?? initialListings,
         leaderboard: parsed.leaderboard ?? initialLeaderboard,
+        chainSubAccounts: [],
       };
     }
   } catch (e) {
@@ -216,6 +240,7 @@ const getInitialState = () => {
     stakes: initialStakes,
     listings: initialListings,
     leaderboard: initialLeaderboard,
+    chainSubAccounts: [],
   };
 };
 
@@ -228,7 +253,7 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
         ...state,
         uncommittedBalance: state.uncommittedBalance + amount,
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      saveStateToLocalStorage(newState);
       return newState;
     });
   },
@@ -245,7 +270,7 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
           ...state,
           uncommittedBalance: state.uncommittedBalance - amount,
         };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+        saveStateToLocalStorage(newState);
         return newState;
       });
       success = true;
@@ -263,7 +288,7 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
           committedBalance: state.committedBalance - committedOverdrawn - penaltyAmount,
           // Accrued penalty can be simulated as burned/governance fee
         };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+        saveStateToLocalStorage(newState);
         return newState;
       });
     }
@@ -326,7 +351,7 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
         markets: updatedMarkets,
         stakes: [...state.stakes, newStake],
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      saveStateToLocalStorage(newState);
       return newState;
     });
 
@@ -363,7 +388,7 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
         committedBalance: state.committedBalance + cost,
         markets: [newMarket, ...state.markets],
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      saveStateToLocalStorage(newState);
       return newState;
     });
 
@@ -389,7 +414,7 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
         markets: updatedMarkets,
         stakes: updatedStakes,
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      saveStateToLocalStorage(newState);
       return newState;
     });
   },
@@ -426,7 +451,7 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
         uncommittedBalance: state.uncommittedBalance + payout,
         stakes: updatedStakes,
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      saveStateToLocalStorage(newState);
       return newState;
     });
 
@@ -463,7 +488,7 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
         stakes: updatedStakes,
         listings: [newListing, ...state.listings],
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      saveStateToLocalStorage(newState);
       return newState;
     });
 
@@ -512,7 +537,7 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
         listings: updatedListings,
         stakes: [...state.stakes, newStake],
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      saveStateToLocalStorage(newState);
       return newState;
     });
 
@@ -538,7 +563,7 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
         listings: updatedListings,
         stakes: updatedStakes,
       };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+      saveStateToLocalStorage(newState);
       return newState;
     });
   },
@@ -583,5 +608,28 @@ export const useMarketStore = create<MarketStore>((set, get) => ({
         markets: updatedMarkets,
       };
     });
-  }
+  },
+
+  isTransactionPending: false,
+
+  syncBalances: async (address: string) => {
+    try {
+      const data = await web3Service.getSxuaDashboard(address as `0x${string}`);
+      const yieldTotal = data.subAccounts.reduce((sum, sub) => sum + sub.liveYield, 0n);
+      const committed = await fromTokenAmount(data.committed);
+      const uncommitted = await fromTokenAmount(data.uncommitted);
+      const yieldEarned = await fromTokenAmount(yieldTotal);
+      
+      set({
+        uncommittedBalance: uncommitted,
+        committedBalance: committed,
+        yieldEarned,
+        chainSubAccounts: data.subAccounts,
+      });
+    } catch (e) {
+      console.error('Failed to sync balances with blockchain:', e);
+    }
+  },
+
+  setTransactionPending: (pending: boolean) => set({ isTransactionPending: pending })
 }));

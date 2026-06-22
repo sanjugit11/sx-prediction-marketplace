@@ -10,18 +10,57 @@ export class LeaderboardService {
       select: { snapshotDate: true },
     });
 
-    if (!latestSnapshot) {
-      return [];
+    if (latestSnapshot) {
+      return prisma.leaderboardSnapshot.findMany({
+        where: {
+          snapshotDate: latestSnapshot.snapshotDate,
+        },
+        orderBy: {
+          rank: 'asc',
+        },
+      });
     }
 
-    return prisma.leaderboardSnapshot.findMany({
-      where: {
-        snapshotDate: latestSnapshot.snapshotDate,
-      },
-      orderBy: {
-        rank: 'asc',
+    // No snapshot exists — compute live from stakes
+    const users = await prisma.user.findMany({
+      include: {
+        stakes: {
+          include: { market: true },
+        },
       },
     });
+
+    const entries: any[] = [];
+    for (const user of users) {
+      if (user.stakes.length === 0) continue;
+      const totalPredictions = user.stakes.length;
+      const resolvedStakes = user.stakes.filter(s => s.market.resolved);
+      const correctPredictions = resolvedStakes.filter(s => s.outcome === s.market.winner).length;
+      const accuracy = resolvedStakes.length > 0
+        ? (correctPredictions * 100) / resolvedStakes.length
+        : 0;
+      const volume = user.stakes.reduce((acc, s) => acc + Number(s.amount), 0);
+
+      entries.push({
+        wallet: user.walletAddress,
+        rank: 0,
+        accuracy: Number(accuracy.toFixed(2)),
+        totalPredictions,
+        correctPredictions,
+        volume: volume.toString(),
+        rewardAmount: '0',
+        snapshotDate: new Date(),
+      });
+    }
+
+    entries.sort((a, b) => {
+      if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
+      if (Number(b.volume) !== Number(a.volume)) return Number(b.volume) - Number(a.volume);
+      return b.totalPredictions - a.totalPredictions;
+    });
+
+    entries.forEach((e, i) => { e.rank = i + 1; });
+    return entries;
   }
 
   static getDistributePayload(tokenAddress: string = config.USDC_ADDRESS, totalPool: string, topUsers: string[]) {

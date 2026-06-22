@@ -16,7 +16,7 @@ import { web3Service } from '../services/web3';
 
 export const CreateMarket: React.FC = () => {
   const navigate = useNavigate();
-  const { createMarket, uncommittedBalance } = useMarketStore();
+  const { createMarket, uncommittedBalance, setTransactionPending, syncBalances } = useMarketStore();
   const { address } = useAccount();
 
   const [txState, setTxState] = useState<'idle' | 'deploying' | 'success'>('idle');
@@ -39,27 +39,45 @@ export const CreateMarket: React.FC = () => {
     if (data.totalLiquidity > uncommittedBalance) return;
 
     setTxState('deploying');
-    
-    const endTime = Math.floor(new Date(data.resolutionDate).getTime() / 1000);
-    await web3Service.createMarket(data.question, endTime, data.totalLiquidity);
-    const refreshedMarkets = await web3Service.getMarkets().catch(() => []);
-    const createdMarket = refreshedMarkets.find((market) => market.question === data.question);
+    setTransactionPending(true);
+    try {
+      // Set endTime to end-of-day (23:59:59 UTC) so it's always in the future
+      const dateObj = new Date(data.resolutionDate);
+      dateObj.setUTCHours(23, 59, 59, 0);
+      const endTime = Math.floor(dateObj.getTime() / 1000);
 
-    const result = createMarket({
-      question: data.question,
-      description: data.description,
-      category: data.category,
-      totalLiquidity: data.totalLiquidity,
-      creator: address,
-      resolutionDate: data.resolutionDate,
-      oracleAddress: data.oracleAddress
-    });
+      const txReceipt = await web3Service.createMarket(data.question, endTime, data.totalLiquidity);
 
-    if (result.success) {
-      setCreatedId(createdMarket?.address ?? result.marketId);
-      setTxState('success');
-    } else {
+      // Only proceed to success if the on-chain tx succeeded
+      if (txReceipt.status !== 'success') {
+        throw new Error('Transaction reverted on-chain');
+      }
+
+      const refreshedMarkets = await web3Service.getMarkets().catch(() => []);
+      const createdMarket = refreshedMarkets.find((market) => market.question === data.question);
+
+      const result = createMarket({
+        question: data.question,
+        description: data.description,
+        category: data.category,
+        totalLiquidity: data.totalLiquidity,
+        creator: address,
+        resolutionDate: data.resolutionDate,
+        oracleAddress: data.oracleAddress,
+      });
+
+      if (result.success) {
+        setCreatedId(createdMarket?.address ?? result.marketId);
+        setTxState('success');
+      } else {
+        setTxState('idle');
+      }
+      await syncBalances(address);
+    } catch (err) {
+      console.error(err);
       setTxState('idle');
+    } finally {
+      setTransactionPending(false);
     }
   };
 

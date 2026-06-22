@@ -13,10 +13,11 @@ export const SUPPORTED_CHAINS = {
     name: 'Hoodi Testnet',
     nativeCurrency: { name: 'Hoodi ETH', symbol: 'ETH', decimals: 18 },
     rpcUrls: {
-      default: { http: [env.HOODI_RPC_URL ?? env.HOODI_TESTNET_RPC_URL ?? 'https://rpc.hoodi.network'] },
+      // Read from root .env via vite.config.ts envDir:'..' — fallback to confirmed working RPC
+      default: { http: [env.HOODI_RPC_URL ?? env.HOODI_TESTNET_RPC_URL ?? 'https://rpc.hoodi.ethpandaops.io'] },
     },
     blockExplorers: {
-      default: { name: 'Hoodi Explorer', url: env.HOODI_EXPLORER_URL ?? 'https://hoodi.etherscan.io' },
+      default: { name: 'Hoodi Explorer', url: 'https://hoodi.etherscan.io' },
     },
     testnet: true,
   }),
@@ -28,7 +29,7 @@ export const SUPPORTED_CHAINS = {
       default: { http: [env.BASE_SEPOLIA_RPC_URL ?? 'https://sepolia.base.org'] },
     },
     blockExplorers: {
-      default: { name: 'BaseScan', url: env.BASE_SEPOLIA_EXPLORER_URL ?? 'https://sepolia.basescan.org' },
+      default: { name: 'BaseScan', url: 'https://sepolia.basescan.org' },
     },
     testnet: true,
   }),

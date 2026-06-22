@@ -40,6 +40,7 @@ export interface Market {
   isVerified: boolean;
   verificationHash: string;
   createdAt: string;
+  minimumStake?: number;
 }
 
 export interface Stake {
@@ -55,6 +56,7 @@ export interface Stake {
   timestamp: string;
   txHash: string;
   status: 'active' | 'resolved' | 'listed';
+  claimed?: boolean;
 }
 
 export interface MarketplaceListing {

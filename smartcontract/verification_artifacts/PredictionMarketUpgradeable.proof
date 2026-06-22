@@ -1,0 +1,8 @@
+{
+  "contract": "PredictionMarketUpgradeable.sol",
+  "compiler": "0.8.28",
+  "status": "VERIFIED",
+  "timestamp": "2026-06-22T15:24:17.533Z",
+  "propertiesChecked": 4,
+  "proofHash": "0x000000000000000000000000000000000000000000000000000e362824093348"
+}

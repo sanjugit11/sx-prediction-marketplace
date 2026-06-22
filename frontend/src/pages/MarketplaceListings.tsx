@@ -10,12 +10,13 @@ import { fromTokenAmount, web3Service } from '../services/web3';
 import type { MarketplaceListing } from '../types';
 
 export const MarketplaceListings: React.FC = () => {
-  const { listings, buyListing, cancelListing, uncommittedBalance } = useMarketStore();
+  const { listings, buyListing, cancelListing, uncommittedBalance, setTransactionPending, syncBalances } = useMarketStore();
   const { address } = useAccount();
 
   const [activeTab, setActiveTab] = useState<'all' | 'my' | 'history'>('all');
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [chainListings, setChainListings] = useState<MarketplaceListing[] | null>(null);
 
   useEffect(() => {
@@ -87,32 +88,63 @@ export const MarketplaceListings: React.FC = () => {
     }
 
     setProcessingId(listingId);
-    
-    await web3Service.buyPosition(listingId, price, address);
+    setTransactionPending(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    try {
+      if (chainListings) {
+        const walletBalance = await web3Service.getTokenBalance(address);
+        if (walletBalance < price) {
+          setErrorMessage('Insufficient wallet balance. You need USDC in your wallet to complete this purchase.');
+          setProcessingId(null);
+          setTransactionPending(false);
+          return;
+        }
+      }
 
-    const res = chainListings ? { success: true } : buyListing(listingId, address);
-    
-    if (res.success) {
-      setSuccessMessage('Contract ownership transfer complete! Checked & sealed inside enclave.');
-      setChainListings((items) => items?.filter((item) => item.id !== listingId) ?? null);
+      await web3Service.buyPosition(listingId, price, address);
+
+      const res = chainListings ? { success: true } : buyListing(listingId, address);
+      
+      if (res.success) {
+        setSuccessMessage('Contract ownership transfer complete! Checked & sealed inside enclave.');
+        setChainListings((items) => items?.filter((item) => item.id !== listingId) ?? null);
+      }
+      await syncBalances(address);
+    } catch (err: any) {
+      console.error(err);
+      let msg = err?.message || err?.shortMessage || 'Transaction failed. Please try again.';
+      setErrorMessage(msg);
+    } finally {
+      setProcessingId(null);
+      setTransactionPending(false);
     }
-    
-    setProcessingId(null);
   };
 
   const handleCancel = async (listingId: string) => {
+    if (!address) return;
     setProcessingId(listingId);
-    
-    if (!chainListings) {
-      await new Promise((res) => setTimeout(res, 800));
-      cancelListing(listingId);
-    } else {
-      await web3Service.cancelListing(BigInt(listingId));
-      setChainListings((items) => items?.filter((item) => item.id !== listingId) ?? null);
+    setTransactionPending(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    try {
+      if (!chainListings) {
+        await new Promise((res) => setTimeout(res, 800));
+        cancelListing(listingId);
+      } else {
+        await web3Service.cancelListing(BigInt(listingId));
+        setChainListings((items) => items?.filter((item) => item.id !== listingId) ?? null);
+      }
+      setSuccessMessage('Order canceled. Position restored to active portfolio.');
+      await syncBalances(address);
+    } catch (err: any) {
+      console.error(err);
+      let msg = err?.message || err?.shortMessage || 'Transaction failed. Please try again.';
+      setErrorMessage(msg);
+    } finally {
+      setProcessingId(null);
+      setTransactionPending(false);
     }
-    
-    setProcessingId(null);
-    setSuccessMessage('Order canceled. Position restored to active portfolio.');
   };
 
   const filteredListings = getFilteredListings();
@@ -137,6 +169,17 @@ export const MarketplaceListings: React.FC = () => {
             <span className="text-xs font-bold text-slate-200">{successMessage}</span>
           </div>
           <Button size="sm" variant="ghost" className="text-xs" onClick={() => setSuccessMessage(null)}>Dismiss</Button>
+        </div>
+      )}
+
+      {/* Error Banner */}
+      {errorMessage && (
+        <div className="p-4 bg-red-950/20 border border-red-800/40 rounded-xl flex gap-3 items-center justify-between animate-in slide-in-from-top-2 duration-300">
+          <div className="flex gap-3 items-center">
+            <Ban className="h-5.5 w-5.5 text-red-400 shrink-0" />
+            <span className="text-xs font-bold text-slate-200">{errorMessage}</span>
+          </div>
+          <Button size="sm" variant="ghost" className="text-xs text-red-400 hover:text-red-300 hover:bg-red-950/50" onClick={() => setErrorMessage(null)}>Dismiss</Button>
         </div>
       )}
 

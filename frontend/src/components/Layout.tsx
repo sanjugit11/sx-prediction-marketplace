@@ -31,7 +31,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const { chain, switchChainAsync } = useNetwork();
   useBalance();
   
-  const { committedBalance, uncommittedBalance, yieldEarned, tickYield, tickOdds } = useMarketStore();
+  const { committedBalance, uncommittedBalance, yieldEarned, tickYield, tickOdds, syncBalances, isTransactionPending } = useMarketStore();
   const { rateLimitRequestCount, rateLimitThreshold, tickRateLimit, streamJailbreakLog } = useSecurityStore();
 
   const navigate = useNavigate();
@@ -40,6 +40,22 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const [chainDropdownOpen, setChainDropdownOpen] = useState(false);
   const [subAccountDropdownOpen, setSubAccountDropdownOpen] = useState(false);
   const [selectedSubAccount, setSelectedSubAccount] = useState(subAccounts[0]);
+
+  // Sync real balances from the blockchain when connected
+  useEffect(() => {
+    if (!isConnected || !address) return;
+    
+    // Sync immediately on mount/address change
+    syncBalances(address);
+
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible' && !isTransactionPending) {
+        syncBalances(address);
+      }
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, [isConnected, address, syncBalances, isTransactionPending]);
 
   // Periodic tickers for live Web3 simulation
   useEffect(() => {
@@ -69,6 +85,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Markets', path: '/markets', icon: TrendingUp },
     { name: 'My Positions', path: '/positions', icon: Coins },
+    { name: 'Claim Payouts', path: '/claim-payout', icon: Award },
     { name: 'Secondary Market', path: '/marketplace', icon: Layers },
     { name: 'Event Explorer', path: '/events', icon: Activity },
     { name: 'Leaderboard', path: '/leaderboard', icon: Award },

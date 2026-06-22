@@ -10,7 +10,7 @@ import { web3Service } from '../services/web3';
 import type { Market } from '../types';
 
 export const AdminResolution: React.FC = () => {
-  const { markets, resolveMarket } = useMarketStore();
+  const { markets, resolveMarket, setTransactionPending, syncBalances } = useMarketStore();
   const { address } = useAccount();
   const [chainMarkets, setChainMarkets] = useState<Market[] | null>(null);
 
@@ -57,14 +57,22 @@ export const AdminResolution: React.FC = () => {
     if (!address) return;
     setResolvingId(marketId);
     setResolvingOutcome(outcome);
+    setTransactionPending(true);
 
-    // Simulate Admin signature relay and enclave computation
-    await web3Service.resolveMarket(marketId, outcome, address);
+    try {
+      // Simulate Admin signature relay and enclave computation
+      await web3Service.resolveMarket(marketId, outcome, address);
 
-    resolveMarket(marketId, outcome);
-    setChainMarkets((items) => items?.filter((m) => m.id !== marketId) ?? null);
-    setResolvingId(null);
-    setResolvingOutcome(null);
+      resolveMarket(marketId, outcome);
+      setChainMarkets((items) => items?.filter((m) => m.id !== marketId) ?? null);
+      await syncBalances(address);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setResolvingId(null);
+      setResolvingOutcome(null);
+      setTransactionPending(false);
+    }
   };
 
   return (

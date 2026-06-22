@@ -32,15 +32,15 @@ export const leaderboardWorker = new Worker(
       ).length;
 
       // Calculate accuracy
-      const accuracy = totalPredictions >= 10
+      const accuracy = totalPredictions >= 1
         ? (correctPredictions * 100) / totalPredictions
         : 0;
 
       // Calculate total volume
       const volume = stakes.reduce((acc, stake) => acc + Number(stake.amount), 0);
 
-      // Only include in ranking list if they have at least 10 predictions
-      if (totalPredictions >= 10) {
+      // Include any user with at least 1 prediction
+      if (totalPredictions >= 1) {
         leaderboardEntries.push({
           wallet: user.walletAddress,
           accuracy,

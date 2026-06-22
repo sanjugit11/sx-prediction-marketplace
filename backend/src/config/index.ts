@@ -1,8 +1,20 @@
 import dotenv from 'dotenv';
+import path from 'path';
 import { z } from 'zod';
 
-// Load environment variables
-dotenv.config();
+// Load environment variables from the root .env (one level above backend/)
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+
+// Map keys from root .env to backend-specific keys if they are not already set
+if (process.env.PREDICTION_MARKET_FACTORY_ADDRESS && !process.env.FACTORY_ADDRESS) {
+  process.env.FACTORY_ADDRESS = process.env.PREDICTION_MARKET_FACTORY_ADDRESS;
+}
+if (process.env.RESELLING_MARKETPLACE_ADDRESS && !process.env.MARKETPLACE_ADDRESS) {
+  process.env.MARKETPLACE_ADDRESS = process.env.RESELLING_MARKETPLACE_ADDRESS;
+}
+if (process.env.SX_ACCESS_CONTROL_ADDRESS && !process.env.ACCESS_CONTROL_ADDRESS) {
+  process.env.ACCESS_CONTROL_ADDRESS = process.env.SX_ACCESS_CONTROL_ADDRESS;
+}
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),

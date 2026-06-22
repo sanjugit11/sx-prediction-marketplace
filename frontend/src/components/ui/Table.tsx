@@ -21,10 +21,10 @@ export const TableRow = ({ className = '', ...props }: React.HTMLAttributes<HTML
   <tr className={`hover:bg-white/5 transition-colors duration-150 ${className}`} {...props} />
 );
 
-export const TableHead = ({ className = '', ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
+export const TableHead = ({ className = '', ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) => (
   <th className={`px-5 py-3.5 font-semibold text-slate-300 tracking-wider ${className}`} {...props} />
 );
 
-export const TableCell = ({ className = '', ...props }: React.HTMLAttributes<HTMLTableCellElement>) => (
+export const TableCell = ({ className = '', ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) => (
   <td className={`px-5 py-3.5 align-middle ${className}`} {...props} />
 );

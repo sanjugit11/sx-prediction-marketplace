@@ -163,18 +163,21 @@ export const eventWorker = new Worker(
       }
 
       case 'MarketResolved': {
-        const { winner } = eventData;
+        const { winner, market: marketAddressFromEvent } = eventData;
+        const targetAddress = (marketAddressFromEvent || contractAddress).toLowerCase();
         
-        // Wait, MarketResolved is emitted by PredictionMarket or ResolutionManager
-        // If contractAddress is the prediction market:
         const market = await prisma.market.findUnique({
-          where: { contractAddress: contractAddress.toLowerCase() },
+          where: { contractAddress: targetAddress },
         });
 
         if (market) {
+          const winningOutcome = typeof winner === 'string'
+            ? (winner.toUpperCase() === 'YES' || winner.toLowerCase() === 'true')
+            : !!winner;
+
           await prisma.market.update({
             where: { id: market.id },
-            data: { resolved: true, winner },
+            data: { resolved: true, winner: winningOutcome },
           });
 
           // Trigger leaderboard updates for all users who staked in this market
@@ -193,12 +196,27 @@ export const eventWorker = new Worker(
       }
 
       case 'PayoutClaimed': {
-        const { positionId } = eventData;
+        const { positionId, market: marketAddress } = eventData;
 
-        await prisma.stake.updateMany({
-          where: { positionId: Number(positionId) },
-          data: { claimed: true },
-        });
+        if (marketAddress) {
+          const market = await prisma.market.findUnique({
+            where: { contractAddress: marketAddress.toLowerCase() },
+          });
+          if (market) {
+            await prisma.stake.updateMany({
+              where: {
+                marketId: market.id,
+                positionId: Number(positionId),
+              },
+              data: { claimed: true },
+            });
+          }
+        } else {
+          await prisma.stake.updateMany({
+            where: { positionId: Number(positionId) },
+            data: { claimed: true },
+          });
+        }
         break;
       }
 

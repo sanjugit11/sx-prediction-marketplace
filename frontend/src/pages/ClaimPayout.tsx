@@ -10,7 +10,7 @@ import { fromTokenAmount, web3Service } from '../services/web3';
 import type { Stake } from '../types';
 
 export const ClaimPayout: React.FC = () => {
-  const { stakes, markets, claimPayout } = useMarketStore();
+  const { stakes, markets, claimPayout, setTransactionPending, syncBalances } = useMarketStore();
   const { address } = useAccount();
   
   const [claimingId, setClaimingId] = useState<string | null>(null);
@@ -22,21 +22,25 @@ export const ClaimPayout: React.FC = () => {
     let cancelled = false;
     web3Service.getUserPredictionPositions(address as `0x${string}`)
       .then(async (positions) => {
-        const claimables = positions.filter((pos) => pos.resolved && !pos.claimed && pos.winner === pos.outcome);
-        const mapped = await Promise.all(claimables.map(async (pos) => ({
-          id: pos.id.toString(),
-          marketId: pos.marketAddress,
-          marketQuestion: pos.marketQuestion,
-          outcome: pos.outcome,
-          amount: await fromTokenAmount(pos.amount),
-          entryOdds: Number(pos.oddsAtEntry) / 1e18,
-          committedAmount: await fromTokenAmount(pos.amount),
-          uncommittedAmount: 0,
-          yieldEarned: await fromTokenAmount(pos.potentialPayout),
-          timestamp: new Date(Number(pos.createdAt) * 1000).toISOString().replace('T', ' ').substring(0, 19),
-          txHash: '',
-          status: 'resolved',
-        } satisfies Stake)));
+        const claimables = positions.filter((pos) => pos.resolved && !pos.claimed);
+        const mapped = await Promise.all(claimables.map(async (pos) => {
+          const isWinner = pos.winner === pos.outcome;
+          const payoutAmount = isWinner ? pos.potentialPayout : 0n;
+          return {
+            id: pos.id.toString(),
+            marketId: pos.marketAddress,
+            marketQuestion: pos.marketQuestion,
+            outcome: pos.outcome,
+            amount: await fromTokenAmount(pos.amount),
+            entryOdds: Number(pos.oddsAtEntry) / 1e18,
+            committedAmount: await fromTokenAmount(pos.amount),
+            uncommittedAmount: 0,
+            yieldEarned: await fromTokenAmount(payoutAmount),
+            timestamp: new Date(Number(pos.createdAt) * 1000).toISOString().replace('T', ' ').substring(0, 19),
+            txHash: '',
+            status: 'resolved',
+          } satisfies Stake;
+        }));
         if (!cancelled) setChainPositions(mapped);
       })
       .catch(() => {
@@ -47,7 +51,7 @@ export const ClaimPayout: React.FC = () => {
     };
   }, [address]);
 
-  // We filter resolved stakes where the user stood to win
+  // We filter resolved stakes where the user stood to win or lose
   const claimablePositions = chainPositions ?? stakes.filter(s => {
     if (s.status !== 'resolved') return false;
     if (s.amount <= 0) return false; // Already claimed
@@ -55,8 +59,7 @@ export const ClaimPayout: React.FC = () => {
     const market = markets.find(m => m.id === s.marketId);
     if (!market || !market.isResolved || !market.outcome) return false;
 
-    // Won or Cancelled (refunding)
-    return s.outcome === market.outcome || market.outcome === 'CANCEL';
+    return true;
   });
 
   const getPayoutAmount = (stake: typeof stakes[0]) => {
@@ -65,8 +68,11 @@ export const ClaimPayout: React.FC = () => {
     if (!market) return 0;
     if (market.outcome === 'CANCEL') return stake.amount; // Refund
     
-    // Payout = stake / (odds / 100)
-    return stake.amount / (stake.entryOdds / 100);
+    const isWinner = stake.outcome === market.outcome;
+    if (isWinner) {
+      return stake.amount / (stake.entryOdds / 100);
+    }
+    return 0; // Loser receives 0
   };
 
   const handleClaim = async (stakeId: string) => {
@@ -85,19 +91,27 @@ export const ClaimPayout: React.FC = () => {
     }
     const payout = getPayoutAmount(position);
 
-    const receipt = await web3Service.claimPayout(position.marketId, position.id);
+    setTransactionPending(true);
+    try {
+      const receipt = await web3Service.claimPayout(position.marketId, position.id);
 
-    if (!chainPositions) {
-      claimPayout(stakeId);
-    } else {
-      setChainPositions((items) => items?.filter((item) => item.id !== stakeId) ?? null);
+      if (!chainPositions) {
+        claimPayout(stakeId);
+      } else {
+        setChainPositions((items) => items?.filter((item) => item.id !== stakeId) ?? null);
+      }
+      
+      setLastClaimReceipt({
+        amount: payout,
+        txHash: receipt.transactionHash
+      });
+      await syncBalances(address);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setClaimingId(null);
+      setTransactionPending(false);
     }
-    
-    setLastClaimReceipt({
-      amount: payout,
-      txHash: receipt.transactionHash
-    });
-    setClaimingId(null);
   };
 
   return (
