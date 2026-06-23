@@ -146,7 +146,7 @@ export const MarketplaceListings: React.FC = () => {
       setTransactionPending(false);
     }
   };
-
+    
   const filteredListings = getFilteredListings();
 
   return (

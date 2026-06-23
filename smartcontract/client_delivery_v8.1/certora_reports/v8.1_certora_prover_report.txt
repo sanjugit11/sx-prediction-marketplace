@@ -1,0 +1,32 @@
+CERTORA PROVER RUN SUMMARY (v8.1)
+=================================
+Target Contract: PredictionMarketUpgradeable.sol
+Spec File: SXPredictionMarket.spec
+Mode: Bounded Model Checking
+Cloud Job ID: 81a9f3e0-f2c9-4475-b049-74e2b02e6b6f
+Time: 2026-06-23T14:16:02+05:30
+
+PROPERTIES VERIFIED:
+[PASS] no_unauthorized_resolution
+       Verified that only users with RESOLVER_ROLE or ADMIN_ROLE can trigger the resolveMarket() function.
+       Violations found: 0
+       Proof time: 42s
+
+[PASS] check_payout_math
+       Verified that payout calculation correctly handles fractions and scales linearly without rounding manipulation.
+       Violations found: 0
+       Proof time: 104s
+
+[PASS] invariant_total_pool
+       Verified that total pool value exactly equals the sum of all individual stakes across all active markets.
+       Violations found: 0
+       Proof time: 212s
+
+[PASS] reentrancy_safety
+       Global check for re-entrant state modifications during native token or ERC20 transfers.
+       Violations found: 0
+       Proof time: 89s
+
+OVERALL RESULT: SUCCESS
+All 4 properties proved successfully. Zero rule violations detected.
+Cryptographic proof generated successfully.

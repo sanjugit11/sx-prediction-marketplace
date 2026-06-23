@@ -17,7 +17,9 @@ import {
   Settings,
   ChevronDown,
   RefreshCw,
-  Globe
+  Globe,
+  Bot,
+  Database
 } from 'lucide-react';
 import { useAccount, useDisconnect, useNetwork, useBalance } from '../hooks/useWeb3';
 import { useMarketStore } from '../stores/useMarketStore';
@@ -92,6 +94,8 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     { name: 'Rewards Hub', path: '/rewards', icon: Gift },
     { name: 'Contract Verification', path: '/verification', icon: UserCheck },
     { name: 'Security Dashboard', path: '/security', icon: ShieldAlert },
+    { name: 'AI Support', path: '/support', icon: Bot },
+    { name: 'Database Architecture', path: '/database', icon: Database },
     { name: 'Architecture Spec', path: '/architecture', icon: Settings },
   ];
 

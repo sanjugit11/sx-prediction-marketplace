@@ -58,12 +58,12 @@ async function main() {
   console.log(`FeeTreasuryUpgradeable proxy deployed to: ${ftAddress}`);
 
   // 3. Deploy Verification Registry Proxy
-  console.log("Deploying VerificationRegistryUpgradeable...");
-  const VerificationRegistryFactory = await ethers.getContractFactory("VerificationRegistryUpgradeable");
-  const verificationRegistry = await upgrades.deployProxy(VerificationRegistryFactory, [acAddress]);
-  await verificationRegistry.waitForDeployment();
-  const vrAddress = await verificationRegistry.getAddress();
-  console.log(`VerificationRegistryUpgradeable proxy deployed to: ${vrAddress}`);
+  // console.log("Deploying VerificationRegistryUpgradeable...");
+  // const VerificationRegistryFactory = await ethers.getContractFactory("VerificationRegistryUpgradeable");
+  // const verificationRegistry = await upgrades.deployProxy(VerificationRegistryFactory, [acAddress]);
+  // await verificationRegistry.waitForDeployment();
+  // const vrAddress = await verificationRegistry.getAddress();
+  // console.log(`VerificationRegistryUpgradeable proxy deployed to: ${vrAddress}`);
 
   // 4. Deploy SXUA Proxy (Unified Account)
   console.log("Deploying SXUAUpgradeable...");
@@ -76,7 +76,7 @@ async function main() {
   await sxua.waitForDeployment();
   const sxuaAddress = await sxua.getAddress();
   console.log(`SXUAUpgradeable proxy deployed to: ${sxuaAddress}`);
-
+ return;
   // 5. Deploy Prediction Market Master Implementation
   console.log("Deploying PredictionMarketUpgradeable (Master Implementation)...");
   const PredictionMarketFactory = await ethers.getContractFactory("PredictionMarketUpgradeable");

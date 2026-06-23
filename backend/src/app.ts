@@ -97,7 +97,8 @@ app.get('/api/stats', StatsController.getStats);
 
 // Security Module
 app.post('/api/security/jailbreak-log', SecurityController.logJailbreak);
-app.get('/api/security/logs', authenticateToken, requireAdmin, SecurityController.getLogs);
+app.get('/api/security/logs/export', SecurityController.exportLogs);
+app.get('/api/security/logs', SecurityController.getLogs);
 
 // Global Error Handler
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {

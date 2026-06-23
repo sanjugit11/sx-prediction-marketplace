@@ -24,6 +24,8 @@ import { EventExplorer } from './pages/EventExplorer';
 import { VerificationDashboard } from './pages/VerificationDashboard';
 import { SecurityDashboard } from './pages/SecurityDashboard';
 import { Architecture } from './pages/Architecture';
+import { AIChatSupport } from './pages/AIChatSupport';
+import { DatabaseDashboard } from './pages/DatabaseDashboard';
 
 // Create React Query Client
 const queryClient = new QueryClient({
@@ -180,6 +182,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <Architecture />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/support" 
+            element={
+              <ProtectedRoute>
+                <AIChatSupport />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/database" 
+            element={
+              <ProtectedRoute>
+                <DatabaseDashboard />
               </ProtectedRoute>
             } 
           />

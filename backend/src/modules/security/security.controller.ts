@@ -48,4 +48,33 @@ export class SecurityController {
       next(error);
     }
   }
+
+  static async exportLogs(req: Request, res: Response, next: NextFunction) {
+    try {
+      const format = req.query.format as string || 'json';
+      
+      const logs = await prisma.securityLog.findMany({
+        orderBy: { timestamp: 'desc' },
+      });
+
+      if (format.toLowerCase() === 'csv') {
+        const header = 'id,ipAddress,walletAddress,payload,detectedType,severity,timestamp\n';
+        const csvRows = logs.map(log => {
+          const payloadStr = log.payload ? log.payload.replace(/"/g, '""') : '';
+          return `${log.id},${log.ipAddress || ''},${log.walletAddress || ''},"${payloadStr}",${log.detectedType},${log.severity},${log.timestamp.toISOString()}`;
+        });
+        const csvString = header + csvRows.join('\n');
+        
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename="jailbreak_logs.csv"');
+        return res.status(200).send(csvString);
+      } else {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Disposition', 'attachment; filename="jailbreak_logs.json"');
+        return res.status(200).send(JSON.stringify(logs, null, 2));
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }

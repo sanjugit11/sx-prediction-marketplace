@@ -4,13 +4,15 @@ import logger from '../utils/logger';
 
 const JAILBREAK_PATTERNS = [
   /ignore\s+previous\s+instructions/i,
+  /bypass\s+authentication/i,
+  /give\s+admin\s+role/i,
+  /override\s+resolver/i,
+  /ignore\s+access\s+control/i,
   /system\s+prompt/i,
-  /you\s+are\s+now\s+an\s+ai/i,
-  /bypass\s+security/i,
+  /bypass/i,
+  /admin\s+access/i,
+  /override\s+role/i,
   /jailbreak/i,
-  /dan\s+mode/i,
-  /developer\s+mode\s+enabled/i,
-  /override\s+rules/i,
 ];
 
 const SQL_INJECTION_PATTERNS = [

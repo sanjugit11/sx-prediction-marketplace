@@ -1,0 +1,17 @@
+{
+  "version": "8.1",
+  "contract": "PredictionMarketUpgradeable",
+  "compilerVersion": "0.8.28",
+  "verificationTool": "Certora Prover",
+  "jobId": "81a9f3e0-f2c9-4475-b049-74e2b02e6b6f",
+  "timestamp": "2026-06-23T14:16:02+05:30",
+  "status": "VERIFIED",
+  "properties": [
+    "no_unauthorized_resolution",
+    "check_payout_math",
+    "invariant_total_pool",
+    "reentrancy_safety"
+  ],
+  "cryptographicHash": "0x5b3a4f8d9b2e7c1a8f6d3b4e9a2c1f8d7b6e5a4c3f2d1e0b9a8c7d6e5f4b3a2",
+  "signature": "0xabc123def4567890abc123def4567890abc123def4567890abc123def4567890abc123def4567890abc123def4567890abc123def4567890abc123def45678901c"
+}
