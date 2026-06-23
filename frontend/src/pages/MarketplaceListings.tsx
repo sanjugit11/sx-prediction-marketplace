@@ -93,7 +93,7 @@ export const MarketplaceListings: React.FC = () => {
     setSuccessMessage(null);
     try {
       if (chainListings) {
-        const walletBalance = await web3Service.getTokenBalance(address);
+        const walletBalance = await web3Service.getTokenBalance(address as `0x${string}`);
         if (walletBalance < price) {
           setErrorMessage('Insufficient wallet balance. You need USDC in your wallet to complete this purchase.');
           setProcessingId(null);

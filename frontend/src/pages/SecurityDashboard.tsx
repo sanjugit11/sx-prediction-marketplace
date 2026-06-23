@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ShieldAlert, Terminal, RefreshCw, Activity, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import React from 'react';
+import { ShieldAlert, Terminal, Activity, CheckCircle2 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/Card';
 import { useSecurityStore } from '../stores/useSecurityStore';
 
