@@ -96,7 +96,7 @@ contract SXUAUpgradeable is Initializable, ReentrancyGuardUpgradeable, PausableU
         if (committedAmount > 0) {
             uint256 subAccountId = nextSubAccountId++;
             uint256 createdAt = block.timestamp;
-            uint256 maturityDate = createdAt + 100 days;
+            uint256 maturityDate = createdAt + 5 minutes;
 
             subAccounts[subAccountId] = SubAccount({
                 id: subAccountId,
@@ -177,8 +177,16 @@ contract SXUAUpgradeable is Initializable, ReentrancyGuardUpgradeable, PausableU
     }
 
     function _calculateYield(SubAccount memory subAcc) internal view returns (uint256) {
-        uint256 daysElapsed = (block.timestamp - subAcc.createdAt) / 1 days;
-        return (subAcc.principal * 12 * daysElapsed) / 10000;
+        uint256 elapsed = block.timestamp - subAcc.createdAt;
+        uint256 simulatedDaysBasis;
+        if (elapsed <= 30) {
+            simulatedDaysBasis = (elapsed * 10000) / 21;
+        } else if (elapsed < 300) {
+            simulatedDaysBasis = 14285 + (elapsed - 30) * 3650;
+        } else {
+            simulatedDaysBasis = 1000000 + ((elapsed - 300) * 10000) / 30;
+        }
+        return (subAcc.principal * 12 * simulatedDaysBasis) / 100000000;
     }
 
     function getUnifiedBalance(address user, address token) external view override returns (uint256) {

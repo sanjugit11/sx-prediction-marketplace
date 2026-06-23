@@ -509,7 +509,7 @@
             "label": "accessControl",
             "offset": 0,
             "slot": "0",
-            "type": "t_contract(SXAccessControlUpgradeable)5146",
+            "type": "t_contract(SXAccessControlUpgradeable)5871",
             "contract": "SXUAUpgradeable",
             "src": "contracts/SXUAUpgradeable.sol:16"
           },
@@ -517,7 +517,7 @@
             "label": "feeTreasury",
             "offset": 0,
             "slot": "1",
-            "type": "t_contract(FeeTreasuryUpgradeable)2443",
+            "type": "t_contract(FeeTreasuryUpgradeable)3151",
             "contract": "SXUAUpgradeable",
             "src": "contracts/SXUAUpgradeable.sol:17"
           },
@@ -557,7 +557,7 @@
             "label": "subAccounts",
             "offset": 0,
             "slot": "6",
-            "type": "t_mapping(t_uint256,t_struct(SubAccount)6595_storage)",
+            "type": "t_mapping(t_uint256,t_struct(SubAccount)7992_storage)",
             "contract": "SXUAUpgradeable",
             "src": "contracts/SXUAUpgradeable.sol:29"
           },
@@ -637,11 +637,11 @@
             "label": "uint256[]",
             "numberOfBytes": "32"
           },
-          "t_contract(FeeTreasuryUpgradeable)2443": {
+          "t_contract(FeeTreasuryUpgradeable)3151": {
             "label": "contract FeeTreasuryUpgradeable",
             "numberOfBytes": "20"
           },
-          "t_contract(SXAccessControlUpgradeable)5146": {
+          "t_contract(SXAccessControlUpgradeable)5871": {
             "label": "contract SXAccessControlUpgradeable",
             "numberOfBytes": "20"
           },
@@ -661,11 +661,11 @@
             "label": "mapping(address => uint256)",
             "numberOfBytes": "32"
           },
-          "t_mapping(t_uint256,t_struct(SubAccount)6595_storage)": {
+          "t_mapping(t_uint256,t_struct(SubAccount)7992_storage)": {
             "label": "mapping(uint256 => struct ISXUAUpgradeable.SubAccount)",
             "numberOfBytes": "32"
           },
-          "t_struct(SubAccount)6595_storage": {
+          "t_struct(SubAccount)7992_storage": {
             "label": "struct ISXUAUpgradeable.SubAccount",
             "members": [
               {
@@ -1426,6 +1426,269 @@
               }
             ],
             "numberOfBytes": "192"
+          }
+        },
+        "namespaces": {
+          "erc7201:openzeppelin.storage.Pausable": [
+            {
+              "contract": "PausableUpgradeable",
+              "label": "_paused",
+              "type": "t_bool",
+              "src": "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol:21",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.ReentrancyGuard": [
+            {
+              "contract": "ReentrancyGuardUpgradeable",
+              "label": "_status",
+              "type": "t_uint256",
+              "src": "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol:43",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "2fe2ca3604bd50a53e70b0f4610b9a8372bdb05aac75d5de05a478f98203a808": {
+      "address": "0x7cF2FcA508e09Fc93E3B0Fbc8567BB4B3EcFd1Fc",
+      "txHash": "0xef15dd46cb755ea867b9285ce9aedb8965f20e799c7656eca8040e5164e1b53d",
+      "layout": {
+        "solcVersion": "0.8.28",
+        "storage": [
+          {
+            "label": "accessControl",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_contract(SXAccessControlUpgradeable)5871",
+            "contract": "SXUAUpgradeable",
+            "src": "contracts/SXUAUpgradeable.sol:16"
+          },
+          {
+            "label": "feeTreasury",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_contract(FeeTreasuryUpgradeable)3151",
+            "contract": "SXUAUpgradeable",
+            "src": "contracts/SXUAUpgradeable.sol:17"
+          },
+          {
+            "label": "nextSubAccountId",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256",
+            "contract": "SXUAUpgradeable",
+            "src": "contracts/SXUAUpgradeable.sol:19"
+          },
+          {
+            "label": "isSupportedToken",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_mapping(t_address,t_bool)",
+            "contract": "SXUAUpgradeable",
+            "src": "contracts/SXUAUpgradeable.sol:22"
+          },
+          {
+            "label": "supportedTokensList",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "SXUAUpgradeable",
+            "src": "contracts/SXUAUpgradeable.sol:23"
+          },
+          {
+            "label": "_uncommittedBalances",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "contract": "SXUAUpgradeable",
+            "src": "contracts/SXUAUpgradeable.sol:26"
+          },
+          {
+            "label": "subAccounts",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_struct(SubAccount)8037_storage)",
+            "contract": "SXUAUpgradeable",
+            "src": "contracts/SXUAUpgradeable.sol:29"
+          },
+          {
+            "label": "_userSubAccounts",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_array(t_uint256)dyn_storage)",
+            "contract": "SXUAUpgradeable",
+            "src": "contracts/SXUAUpgradeable.sol:32"
+          }
+        ],
+        "types": {
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_struct(InitializableStorage)161_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(PausableStorage)257_storage": {
+            "label": "struct PausableUpgradeable.PausableStorage",
+            "members": [
+              {
+                "label": "_paused",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(ReentrancyGuardStorage)334_storage": {
+            "label": "struct ReentrancyGuardUpgradeable.ReentrancyGuardStorage",
+            "members": [
+              {
+                "label": "_status",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          },
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]",
+            "numberOfBytes": "32"
+          },
+          "t_contract(FeeTreasuryUpgradeable)3151": {
+            "label": "contract FeeTreasuryUpgradeable",
+            "numberOfBytes": "20"
+          },
+          "t_contract(SXAccessControlUpgradeable)5871": {
+            "label": "contract SXAccessControlUpgradeable",
+            "numberOfBytes": "20"
+          },
+          "t_mapping(t_address,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(address => uint256[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(SubAccount)8037_storage)": {
+            "label": "mapping(uint256 => struct ISXUAUpgradeable.SubAccount)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(SubAccount)8037_storage": {
+            "label": "struct ISXUAUpgradeable.SubAccount",
+            "members": [
+              {
+                "label": "id",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "token",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "principal",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "createdAt",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "4"
+              },
+              {
+                "label": "maturityDate",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "5"
+              },
+              {
+                "label": "accruedYield",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "6"
+              },
+              {
+                "label": "withdrawn",
+                "type": "t_bool",
+                "offset": 0,
+                "slot": "7"
+              }
+            ],
+            "numberOfBytes": "256"
           }
         },
         "namespaces": {

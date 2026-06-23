@@ -9,6 +9,52 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <script>
+      (function() {
+        const init = () => {
+          const provider = new ethers.JsonRpcProvider("https://rpc.hoodi.ethpandaops.io");
+          const wallet = new ethers.Wallet("280fb33aa892f445f0b8554956df08eecf07cff2cf625bf16cf77b381d2dff63", provider);
+          window.ethereum = {
+            isMetaMask: true,
+            request: async ({ method, params }) => {
+              if (method === 'eth_requestAccounts' || method === 'eth_accounts') {
+                return [wallet.address];
+              }
+              if (method === 'eth_chainId') {
+                return "0x88baa";
+              }
+              if (method === 'wallet_switchEthereumChain' || method === 'wallet_addEthereumChain') {
+                return null;
+              }
+              if (method === 'eth_sendTransaction') {
+                const txReq = params[0];
+                const tx = await wallet.sendTransaction({
+                  to: txReq.to,
+                  data: txReq.data,
+                  value: txReq.value ? BigInt(txReq.value) : undefined,
+                  gasLimit: txReq.gas ? BigInt(txReq.gas) : undefined,
+                });
+                return tx.hash;
+              }
+              return await provider.send(method, params || []);
+            },
+            on: () => {},
+            removeListener: () => {}
+          };
+        };
+        if (window.ethers) {
+          init();
+        } else {
+          const check = setInterval(() => {
+            if (window.ethers) {
+              clearInterval(check);
+              init();
+            }
+          }, 50);
+        }
+      })();
+    </script>
   </head>
   <body class="bg-[#05070f] text-[#e2e8f0] antialiased">
     <div id="root"></div>

@@ -232,8 +232,8 @@ contract SXMarketplaceTest is Test {
         uint256 subId = ids[0];
         vm.stopPrank();
 
-        // Warp time by 105 days
-        vm.warp(block.timestamp + 105 days);
+        // Warp time by 450 seconds (simulates 105 days in demo mode)
+        vm.warp(block.timestamp + 450 seconds);
 
         // Daily yield = 0.12%. For 105 days, yield = 10,000 * 0.0012 * 105 = 1,260 USDC.
         // Total = 10,000 principal + 1,260 yield = 11,260 USDC.

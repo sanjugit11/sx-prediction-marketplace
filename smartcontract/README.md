@@ -68,3 +68,8 @@ $ cast --help
 ## formal verification
 
 npx ts-node -T script/fv_demo.ts
+
+### for shorten the transaction for yield we did this updates
+30 sec -> small yield
+2 min -> partial yield
+5 min -> full yield

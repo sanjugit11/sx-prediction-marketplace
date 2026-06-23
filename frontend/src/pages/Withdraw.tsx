@@ -36,10 +36,23 @@ export const Withdraw: React.FC = () => {
   const availableCommitted = chainBalances?.committed ?? committedBalance;
   const activeSubAccounts = chainBalances?.subAccounts.filter((sub) => !sub.withdrawn) ?? [];
   const selectedSubAccount = activeSubAccounts.find((sub) => sub.id.toString() === selectedSubAccountId);
-  const daysToMaturity = selectedSubAccount
-    ? Math.ceil((Number(selectedSubAccount.maturityDate) * 1000 - Date.now()) / 86_400_000)
+  const elapsedSeconds = selectedSubAccount
+    ? Math.max(0, (Date.now() - Number(selectedSubAccount.createdAt) * 1000) / 1000)
     : 0;
-  const isEarlyCommittedWithdrawal = Boolean(selectedSubAccount && daysToMaturity > 0);
+  const getSimulatedDaysElapsed = (seconds: number) => {
+    if (seconds <= 30) {
+      return seconds / 21;
+    } else if (seconds < 300) {
+      return 1.42857 + (seconds - 30) * 0.365079;
+    } else {
+      return 100 + (seconds - 300) / 30;
+    }
+  };
+  const simulatedDaysElapsed = getSimulatedDaysElapsed(elapsedSeconds);
+  const daysToMaturity = selectedSubAccount
+    ? Math.max(0, Math.ceil(100 - simulatedDaysElapsed))
+    : 0;
+  const isEarlyCommittedWithdrawal = Boolean(selectedSubAccount && Date.now() < Number(selectedSubAccount.maturityDate) * 1000);
 
   useEffect(() => {
     if (!address) return;
@@ -180,7 +193,7 @@ export const Withdraw: React.FC = () => {
                       {isEarlyCommittedWithdrawal ? 'Early Committed Withdrawal Warning' : 'Committed Account Mature'}
                     </strong>
                     {isEarlyCommittedWithdrawal
-                      ? `This account matures in ${daysToMaturity} day(s). Withdrawing before 100 days forfeits yield and applies the contract withdrawal fee.`
+                      ? `This account matures in ${daysToMaturity} simulated day(s). Withdrawing before 100 simulated days (5 minutes) forfeits yield and applies the contract withdrawal fee.`
                       : 'This committed account has reached maturity and can withdraw principal plus accrued yield.'}
                   </div>
                 </div>
